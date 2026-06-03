@@ -15,6 +15,8 @@ collections:
         format: "json"
         fields:
           - {label: Business Name, name: business_name, widget: string}
+          - {label: Logo Image, name: logo_image, widget: image, required: false}
+          - {label: Hero Background Image, name: hero_image, widget: image, required: false}
           - {label: Hero Headline, name: headline, widget: string}
           - {label: Hero Subheadline, name: subheadline, widget: text}
           - {label: Primary Button Text, name: primary_button_text, widget: string}
@@ -23,25 +25,38 @@ collections:
           - {label: Secondary Button Link, name: secondary_button_link, widget: string}
           - {label: About Title, name: about_title, widget: string}
           - {label: About Text, name: about_text, widget: text}
+
           - label: Services
             name: services
             widget: list
             fields:
               - {label: Service Title, name: title, widget: string}
               - {label: Service Description, name: description, widget: text}
+
+          - label: Build Gallery
+            name: gallery
+            widget: list
+            fields:
+              - {label: Build Title, name: title, widget: string}
+              - {label: Build Image, name: image, widget: image}
+              - {label: Build Description, name: description, widget: text, required: false}
+
           - label: Reviews
             name: reviews
             widget: list
             fields:
               - {label: Customer Name, name: name, widget: string}
               - {label: Review Text, name: text, widget: text}
+
           - label: Merch Items
             name: merch
             widget: list
             fields:
               - {label: Product Name, name: name, widget: string}
+              - {label: Product Image, name: image, widget: image, required: false}
               - {label: Product Description, name: description, widget: text}
               - {label: Product Link, name: link, widget: string, required: false}
+
           - {label: Phone Number, name: phone, widget: string, required: false}
           - {label: Email, name: email, widget: string, required: false}
           - {label: Instagram Handle or Link, name: instagram, widget: string, required: false}
