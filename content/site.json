@@ -1,0 +1,64 @@
+{
+  "business_name": "JT Offroad",
+  "headline": "Built Beyond the Pavement",
+  "subheadline": "Custom off-road builds, suspension upgrades, lighting, armor, recovery gear, and adventure-ready vehicles built for Northern California.",
+  "primary_button_text": "Request a Quote",
+  "primary_button_link": "#quote",
+  "secondary_button_text": "View Services",
+  "secondary_button_link": "#services",
+  "about_title": "Northern California Off-Road Builds",
+  "about_text": "JT Offroad builds practical, reliable, and trail-ready vehicles for people who want more than stock. From suspension upgrades to complete adventure builds, every setup is built around how the vehicle will actually be used.",
+  "services": [
+    {
+      "title": "Suspension & Lift Kits",
+      "description": "Lift kits, leveling kits, shocks, coilovers, leaf packs, upper control arms, and complete suspension systems."
+    },
+    {
+      "title": "Wheels & Tires",
+      "description": "Wheel packages, tire upgrades, fitment guidance, and off-road-ready setups."
+    },
+    {
+      "title": "Armor & Protection",
+      "description": "Bumpers, skid plates, rock sliders, bed protection, and underbody armor."
+    },
+    {
+      "title": "Lighting & Electrical",
+      "description": "Light bars, ditch lights, auxiliary lighting, switch panels, battery systems, and clean wiring."
+    },
+    {
+      "title": "Recovery Equipment",
+      "description": "Winches, recovery points, onboard air systems, and trail recovery setups."
+    },
+    {
+      "title": "Overland Builds",
+      "description": "Roof racks, bed racks, storage, camping systems, and full adventure build planning."
+    }
+  ],
+  "reviews": [
+    {
+      "name": "Customer Name",
+      "text": "JT Offroad transformed my truck exactly how I wanted it. Clean work, clear communication, and a solid setup."
+    },
+    {
+      "name": "Customer Name",
+      "text": "Professional install, fair recommendations, and attention to detail. Highly recommend."
+    }
+  ],
+  "merch": [
+    {
+      "name": "Built Beyond Hoodie",
+      "description": "Premium hoodie with JT Offroad branding.",
+      "link": "#"
+    },
+    {
+      "name": "JT Offroad Decal",
+      "description": "Vinyl decal for windows, toolboxes, and rigs.",
+      "link": "#"
+    }
+  ],
+  "phone": "",
+  "email": "",
+  "instagram": "",
+  "location": "Northern California",
+  "quote_intro": "Tell us about your vehicle and what you want to build. We\u2019ll follow up with recommendations and next steps."
+}

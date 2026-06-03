@@ -1,0 +1,49 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
+
+collections:
+  - name: "site"
+    label: "Website Content"
+    files:
+      - label: "JT Offroad Website"
+        name: "site"
+        file: "content/site.json"
+        format: "json"
+        fields:
+          - {label: Business Name, name: business_name, widget: string}
+          - {label: Hero Headline, name: headline, widget: string}
+          - {label: Hero Subheadline, name: subheadline, widget: text}
+          - {label: Primary Button Text, name: primary_button_text, widget: string}
+          - {label: Primary Button Link, name: primary_button_link, widget: string}
+          - {label: Secondary Button Text, name: secondary_button_text, widget: string}
+          - {label: Secondary Button Link, name: secondary_button_link, widget: string}
+          - {label: About Title, name: about_title, widget: string}
+          - {label: About Text, name: about_text, widget: text}
+          - label: Services
+            name: services
+            widget: list
+            fields:
+              - {label: Service Title, name: title, widget: string}
+              - {label: Service Description, name: description, widget: text}
+          - label: Reviews
+            name: reviews
+            widget: list
+            fields:
+              - {label: Customer Name, name: name, widget: string}
+              - {label: Review Text, name: text, widget: text}
+          - label: Merch Items
+            name: merch
+            widget: list
+            fields:
+              - {label: Product Name, name: name, widget: string}
+              - {label: Product Description, name: description, widget: text}
+              - {label: Product Link, name: link, widget: string, required: false}
+          - {label: Phone Number, name: phone, widget: string, required: false}
+          - {label: Email, name: email, widget: string, required: false}
+          - {label: Instagram Handle or Link, name: instagram, widget: string, required: false}
+          - {label: Location, name: location, widget: string}
+          - {label: Quote Form Intro, name: quote_intro, widget: text}
