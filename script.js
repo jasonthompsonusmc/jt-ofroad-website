@@ -28,6 +28,12 @@ function setLink(selector, text, href) {
 function applySiteContent(data) {
   document.title = `${data.business_name || "JT Offroad"} | ${data.headline || "Built Beyond the Pavement"}`;
 
+  const logo = document.querySelector("#site-logo");
+  if (logo && data.logo_image) {
+    logo.src = data.logo_image;
+    logo.style.display = "block";
+  }
+
   setText("[data-cms='business_name']", data.business_name);
   setText("[data-cms='headline']", data.headline);
   setText("[data-cms='subheadline']", data.subheadline);
