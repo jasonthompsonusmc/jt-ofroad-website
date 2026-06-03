@@ -35,6 +35,20 @@ function applySiteContent(data) {
   }
 
   setText("[data-cms='business_name']", data.business_name);
+  setText("[data-cms='business_name']", data.business_name);
+
+const hero = document.querySelector(".hero");
+if (hero && data.hero_image) {
+  hero.style.backgroundImage = `
+    linear-gradient(120deg, rgba(0,0,0,.55), rgba(0,0,0,.85)),
+    url("${data.hero_image}")
+  `;
+  hero.style.backgroundSize = "cover";
+  hero.style.backgroundPosition = "center";
+}
+
+setText("[data-cms='headline']", data.headline);
+setText("[data-cms='subheadline']", data.subheadline);
   setText("[data-cms='headline']", data.headline);
   setText("[data-cms='subheadline']", data.subheadline);
   setText("[data-cms='about_title']", data.about_title);
