@@ -37,13 +37,10 @@ function applySiteContent(data) {
   setText("[data-cms='business_name']", data.business_name);
  const hero = document.querySelector(".hero");
 if (hero && data.hero_image) {
-  hero.style.backgroundImage = `
-    url("${data.hero_image}"),
-    linear-gradient(120deg, rgba(0,0,0,.55), rgba(0,0,0,.9))
-  `;
-  hero.style.backgroundSize = "520px auto, cover";
-  hero.style.backgroundPosition = "center 28%, center";
-  hero.style.backgroundRepeat = "no-repeat, no-repeat";
+  hero.style.backgroundImage = `url("${data.hero_image}")`;
+  hero.style.backgroundSize = "600px auto";
+  hero.style.backgroundPosition = "center 22%";
+  hero.style.backgroundRepeat = "no-repeat";
 }
 }
 setText("[data-cms='headline']", data.headline);
