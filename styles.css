@@ -22,9 +22,12 @@
 }
 .hero-logo {
   width: 100%;
-  max-width: 450px;
+  max-width: 500px;
   height: auto;
   margin-bottom: 20px;
+
+  opacity: .92;
+  filter: drop-shadow(0 15px 30px rgba(0,0,0,.6));
 }
 
 .hero h1 {
