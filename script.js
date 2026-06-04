@@ -35,19 +35,19 @@ function applySiteContent(data) {
   }
 
   setText("[data-cms='business_name']", data.business_name);
-  setText("[data-cms='business_name']", data.business_name);
-}
-const heroLogo = document.querySelector("[data-cms='hero_logo']");
-if (heroLogo && data.logo_image) {
-  heroLogo.src = data.logo_image;
-}
+  const hero = document.querySelector(".hero");
+if (hero && data.hero_image) {
+  hero.style.backgroundImage = `
+    linear-gradient(120deg, rgba(0,0,0,.55), rgba(0,0,0,.85)),
+    url("${data.hero_image}")
   `;
   hero.style.backgroundSize = "cover";
   hero.style.backgroundPosition = "center";
 }
 const heroLogo = document.querySelector("[data-cms='hero_logo']");
-if (heroLogo && data.hero_logo) {
-  heroLogo.src = data.hero_logo;
+if (heroLogo && data.logo_image) {
+  heroLogo.src = data.logo_image;
+}
 }
 setText("[data-cms='headline']", data.headline);
 setText("[data-cms='subheadline']", data.subheadline);
