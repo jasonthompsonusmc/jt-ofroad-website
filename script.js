@@ -36,7 +36,15 @@ function applySiteContent(data) {
 
   setText("[data-cms='business_name']", data.business_name);
   setText("[data-cms='business_name']", data.business_name);
-
+const hero = document.querySelector(".hero");
+if (hero && data.hero_image) {
+  hero.style.backgroundImage = `
+    linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.75)),
+    url("${data.hero_image}")
+  `;
+  hero.style.backgroundSize = "cover";
+  hero.style.backgroundPosition = "center";
+}
 const hero = document.querySelector(".hero");
 if (hero && data.hero_image) {
   hero.style.backgroundImage = `
