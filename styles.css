@@ -10,18 +10,21 @@
   align-items: center;
   justify-content: center;
   text-align: center;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .hero-content {
   max-width: 950px;
   margin: 0 auto;
 }
-
 .hero-logo {
   width: 100%;
-  max-width: 650px;
+  max-width: 450px;
   height: auto;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 .hero h1 {
