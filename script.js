@@ -45,8 +45,8 @@ if (hero && data.hero_image) {
   hero.style.backgroundPosition = "center";
 }
 const heroLogo = document.querySelector("[data-cms='hero_logo']");
-if (heroLogo && data.logo_image) {
-  heroLogo.src = data.logo_image;
+if (heroLogo && data.hero_image) {
+  heroLogo.src = data.hero_image;
 }
 }
 setText("[data-cms='headline']", data.headline);
