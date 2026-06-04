@@ -38,15 +38,12 @@ function applySiteContent(data) {
   const hero = document.querySelector(".hero");
 if (hero && data.hero_image) {
   hero.style.backgroundImage = `
-    linear-gradient(120deg, rgba(0,0,0,.55), rgba(0,0,0,.85)),
+    linear-gradient(120deg, rgba(0,0,0,.75), rgba(0,0,0,.9)),
     url("${data.hero_image}")
   `;
-  hero.style.backgroundSize = "cover";
+  hero.style.backgroundSize = "contain";
   hero.style.backgroundPosition = "center";
-}
-const heroLogo = document.querySelector("[data-cms='hero_logo']");
-if (heroLogo && data.hero_image) {
-  heroLogo.src = data.hero_image;
+  hero.style.backgroundRepeat = "no-repeat";
 }
 }
 setText("[data-cms='headline']", data.headline);
