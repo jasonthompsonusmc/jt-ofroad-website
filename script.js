@@ -46,7 +46,10 @@ if (hero && data.hero_image) {
   hero.style.backgroundSize = "cover";
   hero.style.backgroundPosition = "center";
 }
-
+const heroLogo = document.querySelector("[data-cms='hero_logo']");
+if (heroLogo && data.hero_logo) {
+  heroLogo.src = data.hero_logo;
+}
 setText("[data-cms='headline']", data.headline);
 setText("[data-cms='subheadline']", data.subheadline);
   setText("[data-cms='headline']", data.headline);
