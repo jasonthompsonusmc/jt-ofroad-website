@@ -310,3 +310,71 @@ form button {
     padding-top: 70px !important;
   }
 }
+/* PROFESSIONAL SERVICES SECTION */
+
+#services {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,.15)),
+    var(--bg);
+}
+
+#services .section-heading {
+  margin-bottom: 38px;
+}
+
+#services .card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+#services .card {
+  min-height: 230px;
+  padding: 28px;
+  border: 1px solid rgba(255,255,255,.12);
+  background:
+    linear-gradient(145deg, rgba(217,130,43,.08), rgba(255,255,255,.02)),
+    #15140f;
+  border-radius: 8px;
+  transition: transform .2s ease, border-color .2s ease, background .2s ease;
+}
+
+#services .card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(242,162,58,.45);
+  background:
+    linear-gradient(145deg, rgba(217,130,43,.16), rgba(255,255,255,.03)),
+    #17150f;
+}
+
+#services .card h3 {
+  color: var(--text);
+  font-size: 1.25rem;
+  line-height: 1.15;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  margin-bottom: 14px;
+}
+
+#services .card p {
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+/* Mobile services */
+@media (max-width: 700px) {
+  #services .card-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  #services .card {
+    min-height: auto;
+    padding: 24px;
+  }
+
+  #services .card h3 {
+    font-size: 1.15rem;
+  }
+}
