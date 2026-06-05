@@ -237,39 +237,73 @@ form button {
   border-radius: 5px;
   letter-spacing: .04em;
 }
-/* CLEAN MOBILE HERO FINAL */
+/* BEST MOBILE HERO VERSION */
 @media (max-width: 700px) {
   .site-header {
-    padding: 26px 30px;
+    padding: 24px 28px 22px !important;
+    gap: 18px !important;
+  }
+
+  .brand {
+    font-size: 1.18rem !important;
+    letter-spacing: .08em !important;
+  }
+
+  nav {
+    gap: 24px !important;
+    font-size: 1rem !important;
   }
 
   .hero {
-    min-height: 720px !important;
-    padding: 65px 24px 90px !important;
+    min-height: 740px !important;
+    padding: 120px 24px 80px !important;
+    align-items: flex-start !important;
   }
 
   .hero-bg-logo {
-    top: 45px !important;
-    width: 540px !important;
-    max-width: 95% !important;
-    opacity: 0.42 !important;
+    top: 48px !important;
+    width: 460px !important;
+    max-width: 88% !important;
+    opacity: 0.34 !important;
+  }
+
+  .hero-content {
+    max-width: 100% !important;
+    margin-top: 170px !important;
+  }
+
+  .eyebrow {
+    font-size: .72rem !important;
+    letter-spacing: .22em !important;
+    margin-bottom: 14px !important;
   }
 
   .hero h1 {
-    font-size: clamp(2.45rem, 10vw, 3.7rem) !important;
-    line-height: 0.95 !important;
-    margin-bottom: 22px !important;
+    font-size: clamp(2.25rem, 9.2vw, 3.25rem) !important;
+    line-height: .95 !important;
+    letter-spacing: -.04em !important;
+    margin-bottom: 24px !important;
   }
 
   .hero-subtitle {
-    font-size: 1.05rem !important;
+    font-size: 1rem !important;
     line-height: 1.55 !important;
-    margin-bottom: 34px !important;
+    max-width: 92% !important;
+    margin: 0 auto 30px !important;
   }
 
   .button-row {
-    gap: 18px !important;
-    margin-top: 30px !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+    max-width: 340px !important;
+    margin: 0 auto !important;
+  }
+
+  .button {
+    width: 100% !important;
+    min-height: 56px !important;
+    padding: 14px 18px !important;
+    font-size: .95rem !important;
   }
 
   .section {
