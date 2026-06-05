@@ -378,3 +378,33 @@ form button {
     font-size: 1.15rem;
   }
 }
+/* SERVICE CARD POLISH */
+#services .card {
+  position: relative;
+  overflow: hidden;
+}
+
+#services .card::before {
+  content: "";
+  display: block;
+  width: 42px;
+  height: 4px;
+  background: var(--accent);
+  margin-bottom: 22px;
+}
+
+#services .card h3 {
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+}
+
+#services .card p {
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+#services .card:hover {
+  border-color: rgba(242,162,58,.55);
+  transform: translateY(-3px);
+}
