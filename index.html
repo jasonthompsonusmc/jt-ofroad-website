@@ -38,7 +38,23 @@
     color: #c9c2b8;
     line-height: 1.55;
   }
+#quote select {
+  width: 100%;
+  min-height: 54px;
+  padding: 0 16px;
+  background: #050504;
+  color: #f4efe7;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 5px;
+  font: inherit;
+}
 
+#quote select:focus,
+#quote input:focus,
+#quote textarea:focus {
+  outline: none;
+  border-color: #f2a23a;
+}
   @media (max-width: 700px) {
     #merch .merch-grid {
       grid-template-columns: 1fr;
