@@ -6,6 +6,46 @@
   <title>JT Offroad | Built Beyond the Pavement</title>
   <link rel="stylesheet" href="styles.css">
   <style>
+  #merch .merch-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+    margin-top: 34px;
+  }
+
+  #merch .merch-card {
+    min-height: 230px;
+    padding: 28px;
+    border: 1px solid rgba(255,255,255,.14);
+    background: linear-gradient(145deg, rgba(217,130,43,.12), rgba(255,255,255,.03));
+  }
+
+  #merch .merch-card span {
+    color: #f2a23a;
+    text-transform: uppercase;
+    font-weight: 900;
+    letter-spacing: .15em;
+    font-size: .75rem;
+  }
+
+  #merch .merch-card h3 {
+    margin-top: 28px;
+    text-transform: uppercase;
+    font-size: 1.3rem;
+  }
+
+  #merch .merch-card p {
+    color: #c9c2b8;
+    line-height: 1.55;
+  }
+
+  @media (max-width: 700px) {
+    #merch .merch-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+  <style>
   #gallery .build-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
