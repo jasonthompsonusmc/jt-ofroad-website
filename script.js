@@ -60,17 +60,27 @@ setText("[data-cms='subheadline']", data.subheadline);
     if (data.phone && el.tagName === "A") el.href = `tel:${data.phone.replace(/[^0-9+]/g, "")}`;
   });
 
-  document.querySelectorAll("[data-cms='email']").forEach(el => {
-    el.textContent = data.email || "Add email in CMS";
-    if (data.email && el.tagName === "A") el.href = `mailto:${data.email}`;
-  });
+document.querySelectorAll("[data-cms='email']").forEach(el => {
+  if (data.email) {
+    el.textContent = data.email;
+    if (el.tagName === "A") el.href = `mailto:${data.email}`;
+  } else {
+    el.style.display = "none";
+  }
+});
 
-  document.querySelectorAll("[data-cms='instagram']").forEach(el => {
-    el.textContent = data.instagram || "Add Instagram in CMS";
-    if (data.instagram && el.tagName === "A") {
-      el.href = data.instagram.startsWith("http") ? data.instagram : `https://instagram.com/${data.instagram.replace("@", "")}`;
+document.querySelectorAll("[data-cms='instagram']").forEach(el => {
+  if (data.instagram) {
+    el.textContent = data.instagram;
+    if (el.tagName === "A") {
+      el.href = data.instagram.startsWith("http")
+        ? data.instagram
+        : `https://instagram.com/${data.instagram.replace("@", "")}`;
     }
-  });
+  } else {
+    el.style.display = "none";
+  }
+});
 
   const services = Array.isArray(data.services) && data.services.length
   ? data.services
