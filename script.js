@@ -72,12 +72,23 @@ setText("[data-cms='subheadline']", data.subheadline);
     }
   });
 
-  renderCards("#services-list", data.services, service => `
-    <article class="card">
-      <h3>${escapeHtml(service.title)}</h3>
-      <p>${escapeHtml(service.description)}</p>
-    </article>
-  `);
+  const services = Array.isArray(data.services) && data.services.length
+  ? data.services
+  : [
+      { title: "Suspension & Lift Kits", description: "Lift kits, leveling kits, shocks, coilovers, leaf packs, upper control arms, and complete suspension systems." },
+      { title: "Wheels & Tires", description: "Wheel packages, tire upgrades, fitment guidance, and off-road-ready setups." },
+      { title: "Armor & Protection", description: "Bumpers, skid plates, rock sliders, bed protection, and underbody armor." },
+      { title: "Lighting & Electrical", description: "Light bars, ditch lights, auxiliary lighting, switch panels, battery systems, and clean wiring." },
+      { title: "Recovery Equipment", description: "Winches, recovery points, onboard air systems, and trail recovery setups." },
+      { title: "Overland Builds", description: "Roof racks, bed racks, storage, camping systems, and full adventure build planning." }
+    ];
+
+renderCards("#services-list", services, service => `
+  <article class="card">
+    <h3>${escapeHtml(service.title)}</h3>
+    <p>${escapeHtml(service.description)}</p>
+  </article>
+`);
 
   renderCards("#reviews-list", data.reviews, review => `
     <article class="review-card">
