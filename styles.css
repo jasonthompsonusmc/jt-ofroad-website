@@ -534,3 +534,51 @@ form button {
     grid-template-columns: 1fr;
   }
 }
+/* DESKTOP HERO FINAL POLISH */
+@media (min-width: 701px) {
+  .hero {
+    min-height: calc(100vh - 72px) !important;
+    padding: 70px 40px 90px !important;
+    align-items: center !important;
+  }
+
+  .hero-bg-logo {
+    top: 55px !important;
+    width: 720px !important;
+    max-width: 52vw !important;
+    opacity: 0.34 !important;
+  }
+
+  .hero-content {
+    max-width: 850px !important;
+    margin-top: 120px !important;
+  }
+
+  .eyebrow {
+    margin-bottom: 16px !important;
+  }
+
+  .hero h1 {
+    font-size: clamp(4rem, 5.8vw, 6.2rem) !important;
+    line-height: 0.95 !important;
+    letter-spacing: -0.04em !important;
+    margin-bottom: 28px !important;
+  }
+
+  .hero-subtitle {
+    max-width: 760px !important;
+    margin: 0 auto 34px !important;
+    font-size: 1.18rem !important;
+    line-height: 1.55 !important;
+  }
+
+  .button-row {
+    justify-content: center !important;
+    gap: 18px !important;
+  }
+
+  .button {
+    min-width: 180px !important;
+    min-height: 54px !important;
+  }
+}
