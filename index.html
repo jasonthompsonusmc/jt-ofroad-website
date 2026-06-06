@@ -60,39 +60,61 @@
       grid-template-columns: 1fr;
     }
   }
-    /* DESKTOP HERO FIX */
+/* DESKTOP HERO FINAL VERSION */
 @media (min-width: 701px) {
   .hero {
-    min-height: 760px !important;
-    padding: 80px 40px 70px !important;
-    align-items: flex-start !important;
+    min-height: calc(100vh - 82px) !important;
+    padding: 90px 40px 110px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
   }
 
   .hero-bg-logo {
-    top: 80px !important;
-    width: 640px !important;
-    max-width: 44vw !important;
-    opacity: 0.38 !important;
+    top: 70px !important;
+    width: 680px !important;
+    max-width: 42vw !important;
+    opacity: 0.42 !important;
   }
 
   .hero-content {
-    max-width: 780px !important;
-    margin-top: 260px !important;
+    max-width: 900px !important;
+    margin-top: 190px !important;
+  }
+
+  .hero .eyebrow {
+    font-size: 0.78rem !important;
+    letter-spacing: 0.24em !important;
+    margin-bottom: 18px !important;
   }
 
   .hero h1 {
-    font-size: clamp(4rem, 5vw, 5.6rem) !important;
-    line-height: 0.95 !important;
-    letter-spacing: -0.04em !important;
-    margin-bottom: 26px !important;
+    font-size: clamp(4.6rem, 5.6vw, 6.4rem) !important;
+    line-height: 0.92 !important;
+    letter-spacing: -0.055em !important;
+    margin: 0 auto 30px !important;
+    max-width: 930px !important;
   }
 
   .hero-subtitle {
     max-width: 720px !important;
-    font-size: 1.15rem !important;
-    line-height: 1.55 !important;
-    margin: 0 auto 32px !important;
+    margin: 0 auto 36px !important;
+    font-size: 1.12rem !important;
+    line-height: 1.6 !important;
   }
+
+  .button-row {
+    justify-content: center !important;
+    gap: 18px !important;
+  }
+
+  .button {
+    min-width: 190px !important;
+    min-height: 56px !important;
+    padding: 16px 24px !important;
+  }
+}
 
   .button-row {
     justify-content: center !important;
