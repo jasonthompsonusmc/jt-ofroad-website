@@ -68,6 +68,44 @@
     #merch .merch-grid { grid-template-columns: 1fr; }
     #gallery .build-grid { grid-template-columns: 1fr; }
   }
+
+  /* ── Hero ── */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    background: #080807;
+  }
+
+  /* Dark photo background layer */
+  .hero-photo-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.28;
+    z-index: 0;
+  }
+
+  /* Logo watermark — always centered, always subtle */
+  .hero-bg-logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -54%);
+    width: 520px;
+    max-width: 46vw;
+    opacity: 0.13;
+    z-index: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+  }
+
   @media (min-width: 701px) {
     .site-header { height: 72px !important; padding: 0 60px !important; }
     .hero {
@@ -77,25 +115,14 @@
       align-items: center !important;
       justify-content: center !important;
       text-align: center !important;
-      position: relative !important;
-      overflow: hidden !important;
     }
     .hero-bg-logo {
-      position: absolute !important;
-      top: 90px !important;
-      left: 50% !important;
-      transform: translateX(-50%) !important;
-      width: 560px !important;
-      max-width: 38vw !important;
-      opacity: 0.48 !important;
-      z-index: 0 !important;
-      pointer-events: none !important;
+      width: 600px !important;
+      max-width: 44vw !important;
+      opacity: 0.11 !important;
     }
     .hero-content {
-      position: relative !important;
-      z-index: 1 !important;
-      max-width: 850px !important;
-      margin-top: 250px !important;
+      max-width: 860px !important;
     }
     .hero .eyebrow { font-size: 0.78rem !important; letter-spacing: 0.24em !important; margin-bottom: 16px !important; }
     .hero h1 { font-size: clamp(4.1rem, 5vw, 5.6rem) !important; line-height: 0.94 !important; letter-spacing: -0.05em !important; max-width: 860px !important; margin: 0 auto 26px !important; }
@@ -103,6 +130,8 @@
     .button-row { display: flex !important; justify-content: center !important; gap: 18px !important; }
     .button { min-width: 180px !important; min-height: 54px !important; padding: 15px 24px !important; }
   }
+
+  /* ── Gallery ── */
   #gallery .build-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -122,6 +151,9 @@
   #gallery .build-card span { color: #f2a23a; font-weight: 900; letter-spacing: .18em; font-size: .8rem; }
   #gallery .build-card h3 { text-transform: uppercase; font-size: 1.2rem; margin: 10px 0 8px; }
   #gallery .build-card p { color: #c9c2b8; line-height: 1.55; font-size: .9rem; }
+
+  /* ── Footer social ── */
+  .footer-social { margin-top: 10px; }
   .footer-social a {
     color: #f2a23a;
     text-decoration: none;
@@ -149,6 +181,9 @@
 
   <main>
     <section class="hero">
+      <!-- Photo background: set via hero_image in CMS -->
+      <div class="hero-photo-bg" id="hero-photo-bg"></div>
+      <!-- Logo watermark: always uses logo_image, very subtle -->
       <img id="hero-bg-logo" class="hero-bg-logo" src="" alt="">
       <div class="hero-content">
         <p class="eyebrow" id="hero-location"></p>
@@ -248,7 +283,7 @@
   <footer class="site-footer">
     <strong id="footer-name">JT Offroad</strong>
     <div class="footer-links">
-      <a id="footer-phone" href="#">—</a>
+      <a id="footer-phone" href="#" style="display:none;">—</a>
       <a href="#quote">Request a Quote</a>
       <a href="#services">View Services</a>
     </div>
@@ -256,16 +291,17 @@
   </footer>
 
   <script>
-  // ─── Load all content from CMS site.json ───────────────────────────────────
   fetch('/content/site.json')
     .then(r => r.json())
     .then(d => {
-      // ── Business name & logo ──
+
+      // ── Business name ──
       const nameEl = document.getElementById('business-name');
       if (d.business_name) nameEl.textContent = d.business_name;
       document.getElementById('footer-name').textContent = d.business_name || 'JT Offroad';
       document.title = (d.business_name || 'JT Offroad') + ' | Built Beyond the Pavement';
 
+      // ── Header logo ──
       const logo = document.getElementById('site-logo');
       if (d.logo_image) {
         logo.src = d.logo_image;
@@ -273,15 +309,19 @@
         nameEl.style.display = 'none';
       }
 
-      // ── Hero ──
-      const heroBg = document.getElementById('hero-bg-logo');
-      if (d.logo_image) heroBg.src = d.logo_image;
-      else heroBg.src = '/images/uploads/5894e22396f94596692fe72cfecb4e82cef6409f3af68ebd9e9eb5210cc900d9.png';
-
-      if (d.hero_image) {
-        document.querySelector('.hero').style.backgroundImage = `url(${d.hero_image})`;
+      // ── Hero: logo watermark (always logo_image, very subtle) ──
+      const heroBgLogo = document.getElementById('hero-bg-logo');
+      if (d.logo_image) {
+        heroBgLogo.src = d.logo_image;
       }
 
+      // ── Hero: photo background (hero_image — separate from logo) ──
+      const heroBg = document.getElementById('hero-photo-bg');
+      if (d.hero_image) {
+        heroBg.style.backgroundImage = `url(${d.hero_image})`;
+      }
+
+      // ── Hero text ──
       setText('hero-location', d.location);
       setText('hero-headline', d.headline);
       setText('hero-subheadline', d.subheadline);
@@ -302,15 +342,16 @@
       if (d.phone) {
         phoneEl.textContent = d.phone;
         phoneEl.href = 'tel:' + d.phone.replace(/\D/g, '');
-      } else {
-        phoneEl.style.display = 'none';
+        phoneEl.style.display = '';
       }
 
       // ── Instagram ──
       const social = document.getElementById('footer-social');
       if (d.instagram) {
-        const handle = d.instagram.startsWith('http') ? d.instagram : 'https://instagram.com/' + d.instagram.replace('@','');
-        social.innerHTML = `<a href="${handle}" target="_blank" rel="noopener">Instagram</a>`;
+        const handle = d.instagram.startsWith('http')
+          ? d.instagram
+          : 'https://instagram.com/' + d.instagram.replace('@', '');
+        social.innerHTML = `<a href="${handle}" target="_blank" rel="noopener">@ Instagram</a>`;
       }
 
       // ── Services ──
@@ -330,13 +371,13 @@
           <article class="build-card">
             ${b.image ? `<img src="${b.image}" alt="${b.title}">` : ''}
             <div class="build-body">
-              <span>${String(i+1).padStart(2,'0')}</span>
+              <span>${String(i + 1).padStart(2, '0')}</span>
               <h3>${b.title}</h3>
               ${b.description ? `<p>${b.description}</p>` : ''}
             </div>
           </article>`).join('');
       } else {
-        galleryList.innerHTML = '<p style="color:#c9c2b8;">Build photos coming soon. Add them in the CMS under Build Gallery.</p>';
+        galleryList.innerHTML = '<p style="color:#c9c2b8;padding:20px 0;">Build photos coming soon — add them in the CMS under Build Gallery.</p>';
       }
 
       // ── Merch ──
@@ -347,8 +388,10 @@
             ${m.image ? `<img src="${m.image}" alt="${m.name}">` : '<span>Coming Soon</span>'}
             <h3>${m.name}</h3>
             <p>${m.description}</p>
-            ${m.link ? `<a href="${m.link}" target="_blank">Shop Now</a>` : ''}
+            ${m.link && m.link !== '#' ? `<a href="${m.link}" target="_blank">Shop Now</a>` : ''}
           </article>`).join('');
+      } else {
+        merchList.innerHTML = '<p style="color:#c9c2b8;padding:20px 0;">Merch coming soon.</p>';
       }
 
       // ── Reviews ──
@@ -360,10 +403,11 @@
             <strong>— ${r.name}</strong>
           </article>`).join('');
       } else {
-        reviewsList.innerHTML = '<p style="color:#c9c2b8;text-align:center;">Customer reviews coming soon.</p>';
+        reviewsList.innerHTML = '<p style="color:#c9c2b8;text-align:center;padding:20px 0;">Customer reviews coming soon.</p>';
       }
+
     })
-    .catch(() => console.warn('Could not load site.json — using default content'));
+    .catch(err => console.warn('Could not load site.json:', err));
 
   function setText(id, val) {
     if (val) document.getElementById(id).textContent = val;
