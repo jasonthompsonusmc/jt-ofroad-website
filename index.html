@@ -74,28 +74,46 @@
     position: relative;
     overflow: hidden;
     background: #080807;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
   }
 
-  /* Dark photo background layer */
+  /* Photo background — bumped to 0.42 for better visibility */
   .hero-photo-bg {
     position: absolute;
     inset: 0;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    opacity: 0.28;
+    opacity: 0.42;
     z-index: 0;
   }
 
-  /* Logo watermark — always centered, always subtle */
+  /* Subtle dark gradient so text always reads */
+  .hero-photo-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(8,8,7,0.15) 0%,
+      rgba(8,8,7,0.35) 60%,
+      rgba(8,8,7,0.65) 100%
+    );
+  }
+
+  /* Logo watermark — very subtle ghost */
   .hero-bg-logo {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -54%);
-    width: 520px;
-    max-width: 46vw;
-    opacity: 0.13;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    max-width: 50vw;
+    opacity: 0.09;
     z-index: 1;
     pointer-events: none;
     user-select: none;
@@ -104,31 +122,60 @@
   .hero-content {
     position: relative;
     z-index: 2;
+    padding: 40px 24px;
   }
 
   @media (min-width: 701px) {
     .site-header { height: 72px !important; padding: 0 60px !important; }
+
     .hero {
-      min-height: calc(100vh - 72px) !important;
+      min-height: 100vh !important;
       padding: 0 40px !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      text-align: center !important;
     }
+
     .hero-bg-logo {
-      width: 600px !important;
-      max-width: 44vw !important;
-      opacity: 0.11 !important;
+      width: 640px !important;
+      max-width: 46vw !important;
+      opacity: 0.08 !important;
     }
+
     .hero-content {
-      max-width: 860px !important;
+      max-width: 900px !important;
+      padding: 0 !important;
     }
-    .hero .eyebrow { font-size: 0.78rem !important; letter-spacing: 0.24em !important; margin-bottom: 16px !important; }
-    .hero h1 { font-size: clamp(4.1rem, 5vw, 5.6rem) !important; line-height: 0.94 !important; letter-spacing: -0.05em !important; max-width: 860px !important; margin: 0 auto 26px !important; }
-    .hero-subtitle { max-width: 690px !important; margin: 0 auto 32px !important; font-size: 1.08rem !important; line-height: 1.55 !important; }
-    .button-row { display: flex !important; justify-content: center !important; gap: 18px !important; }
-    .button { min-width: 180px !important; min-height: 54px !important; padding: 15px 24px !important; }
+
+    .hero .eyebrow {
+      font-size: 0.78rem !important;
+      letter-spacing: 0.24em !important;
+      margin-bottom: 16px !important;
+    }
+
+    .hero h1 {
+      font-size: clamp(4.1rem, 5vw, 5.8rem) !important;
+      line-height: 0.94 !important;
+      letter-spacing: -0.05em !important;
+      max-width: 880px !important;
+      margin: 0 auto 26px !important;
+    }
+
+    .hero-subtitle {
+      max-width: 690px !important;
+      margin: 0 auto 36px !important;
+      font-size: 1.08rem !important;
+      line-height: 1.55 !important;
+    }
+
+    .button-row {
+      display: flex !important;
+      justify-content: center !important;
+      gap: 18px !important;
+    }
+
+    .button {
+      min-width: 180px !important;
+      min-height: 54px !important;
+      padding: 15px 24px !important;
+    }
   }
 
   /* ── Gallery ── */
@@ -181,9 +228,7 @@
 
   <main>
     <section class="hero">
-      <!-- Photo background: set via hero_image in CMS -->
       <div class="hero-photo-bg" id="hero-photo-bg"></div>
-      <!-- Logo watermark: always uses logo_image, very subtle -->
       <img id="hero-bg-logo" class="hero-bg-logo" src="" alt="">
       <div class="hero-content">
         <p class="eyebrow" id="hero-location"></p>
@@ -309,19 +354,15 @@
         nameEl.style.display = 'none';
       }
 
-      // ── Hero: logo watermark (always logo_image, very subtle) ──
+      // ── Hero watermark (always logo) ──
       const heroBgLogo = document.getElementById('hero-bg-logo');
-      if (d.logo_image) {
-        heroBgLogo.src = d.logo_image;
-      }
+      if (d.logo_image) heroBgLogo.src = d.logo_image;
 
-      // ── Hero: photo background (hero_image — separate from logo) ──
+      // ── Hero photo background (separate from logo) ──
       const heroBg = document.getElementById('hero-photo-bg');
-      if (d.hero_image) {
-        heroBg.style.backgroundImage = `url(${d.hero_image})`;
-      }
+      if (d.hero_image) heroBg.style.backgroundImage = 'url(' + d.hero_image + ')';
 
-      // ── Hero text ──
+      // ── Text fields ──
       setText('hero-location', d.location);
       setText('hero-headline', d.headline);
       setText('hero-subheadline', d.subheadline);
@@ -330,12 +371,12 @@
       setText('quote-intro', d.quote_intro);
 
       // ── Buttons ──
-      const primaryBtn = document.getElementById('primary-btn');
-      const secondaryBtn = document.getElementById('secondary-btn');
-      if (d.primary_button_text) primaryBtn.textContent = d.primary_button_text;
-      if (d.primary_button_link) primaryBtn.href = d.primary_button_link;
-      if (d.secondary_button_text) secondaryBtn.textContent = d.secondary_button_text;
-      if (d.secondary_button_link) secondaryBtn.href = d.secondary_button_link;
+      const pb = document.getElementById('primary-btn');
+      const sb = document.getElementById('secondary-btn');
+      if (d.primary_button_text) pb.textContent = d.primary_button_text;
+      if (d.primary_button_link) pb.href = d.primary_button_link;
+      if (d.secondary_button_text) sb.textContent = d.secondary_button_text;
+      if (d.secondary_button_link) sb.href = d.secondary_button_link;
 
       // ── Phone ──
       const phoneEl = document.getElementById('footer-phone');
@@ -351,31 +392,29 @@
         const handle = d.instagram.startsWith('http')
           ? d.instagram
           : 'https://instagram.com/' + d.instagram.replace('@', '');
-        social.innerHTML = `<a href="${handle}" target="_blank" rel="noopener">@ Instagram</a>`;
+        social.innerHTML = '<a href="' + handle + '" target="_blank" rel="noopener">@ Instagram</a>';
       }
 
       // ── Services ──
       const servicesList = document.getElementById('services-list');
       if (d.services && d.services.length) {
-        servicesList.innerHTML = d.services.map(s => `
-          <article class="card">
-            <h3>${s.title}</h3>
-            <p>${s.description}</p>
-          </article>`).join('');
+        servicesList.innerHTML = d.services.map(s =>
+          '<article class="card"><h3>' + s.title + '</h3><p>' + s.description + '</p></article>'
+        ).join('');
       }
 
       // ── Gallery ──
       const galleryList = document.getElementById('gallery-list');
       if (d.gallery && d.gallery.length) {
-        galleryList.innerHTML = d.gallery.map((b, i) => `
-          <article class="build-card">
-            ${b.image ? `<img src="${b.image}" alt="${b.title}">` : ''}
-            <div class="build-body">
-              <span>${String(i + 1).padStart(2, '0')}</span>
-              <h3>${b.title}</h3>
-              ${b.description ? `<p>${b.description}</p>` : ''}
-            </div>
-          </article>`).join('');
+        galleryList.innerHTML = d.gallery.map((b, i) =>
+          '<article class="build-card">' +
+          (b.image ? '<img src="' + b.image + '" alt="' + b.title + '">' : '') +
+          '<div class="build-body">' +
+          '<span>' + String(i + 1).padStart(2, '0') + '</span>' +
+          '<h3>' + b.title + '</h3>' +
+          (b.description ? '<p>' + b.description + '</p>' : '') +
+          '</div></article>'
+        ).join('');
       } else {
         galleryList.innerHTML = '<p style="color:#c9c2b8;padding:20px 0;">Build photos coming soon — add them in the CMS under Build Gallery.</p>';
       }
@@ -383,13 +422,14 @@
       // ── Merch ──
       const merchList = document.getElementById('merch-list');
       if (d.merch && d.merch.length) {
-        merchList.innerHTML = d.merch.map(m => `
-          <article class="merch-card">
-            ${m.image ? `<img src="${m.image}" alt="${m.name}">` : '<span>Coming Soon</span>'}
-            <h3>${m.name}</h3>
-            <p>${m.description}</p>
-            ${m.link && m.link !== '#' ? `<a href="${m.link}" target="_blank">Shop Now</a>` : ''}
-          </article>`).join('');
+        merchList.innerHTML = d.merch.map(m =>
+          '<article class="merch-card">' +
+          (m.image ? '<img src="' + m.image + '" alt="' + m.name + '">' : '<span>Coming Soon</span>') +
+          '<h3>' + m.name + '</h3>' +
+          '<p>' + m.description + '</p>' +
+          (m.link && m.link !== '#' ? '<a href="' + m.link + '" target="_blank">Shop Now</a>' : '') +
+          '</article>'
+        ).join('');
       } else {
         merchList.innerHTML = '<p style="color:#c9c2b8;padding:20px 0;">Merch coming soon.</p>';
       }
@@ -397,11 +437,9 @@
       // ── Reviews ──
       const reviewsList = document.getElementById('reviews-list');
       if (d.reviews && d.reviews.length) {
-        reviewsList.innerHTML = d.reviews.map(r => `
-          <article class="review-card">
-            <p>"${r.text}"</p>
-            <strong>— ${r.name}</strong>
-          </article>`).join('');
+        reviewsList.innerHTML = d.reviews.map(r =>
+          '<article class="review-card"><p>"' + r.text + '"</p><strong>— ' + r.name + '</strong></article>'
+        ).join('');
       } else {
         reviewsList.innerHTML = '<p style="color:#c9c2b8;text-align:center;padding:20px 0;">Customer reviews coming soon.</p>';
       }
