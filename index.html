@@ -414,7 +414,7 @@
       const social = document.getElementById('footer-social');
       if (d.instagram) {
         const handle = d.instagram.startsWith('http') ? d.instagram : 'https://instagram.com/' + d.instagram.replace('@','');
-        social.innerHTML = '<a href="' + handle + '" target="_blank" rel="noopener">@ Instagram</a>';
+        social.innerHTML = '<a href="' + handle + '" target="_blank" rel="noopener">@ ' + d.instagram + '</a>';
       }
 
       const servicesList = document.getElementById('services-list');
