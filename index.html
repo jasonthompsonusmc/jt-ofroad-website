@@ -12,14 +12,19 @@
     gap: 22px;
     margin-top: 34px;
   }
-
   #merch .merch-card {
     min-height: 230px;
     padding: 28px;
     border: 1px solid rgba(255,255,255,.14);
     background: linear-gradient(145deg, rgba(217,130,43,.12), rgba(255,255,255,.03));
   }
-
+  #merch .merch-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 16px;
+  }
   #merch .merch-card span {
     color: #f2a23a;
     text-transform: uppercase;
@@ -27,224 +32,112 @@
     letter-spacing: .15em;
     font-size: .75rem;
   }
-
   #merch .merch-card h3 {
-    margin-top: 28px;
+    margin-top: 14px;
     text-transform: uppercase;
     font-size: 1.3rem;
   }
-
-  #merch .merch-card p {
-    color: #c9c2b8;
-    line-height: 1.55;
+  #merch .merch-card p { color: #c9c2b8; line-height: 1.55; }
+  #merch .merch-card a {
+    display: inline-block;
+    margin-top: 14px;
+    color: #f2a23a;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: .85rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
   }
-#quote select {
-  width: 100%;
-  min-height: 54px;
-  padding: 0 16px;
-  background: #050504;
-  color: #f4efe7;
-  border: 1px solid rgba(255,255,255,.14);
-  border-radius: 5px;
-  font: inherit;
-}
-
-#quote select:focus,
-#quote input:focus,
-#quote textarea:focus {
-  outline: none;
-  border-color: #f2a23a;
-}
+  #quote select {
+    width: 100%;
+    min-height: 54px;
+    padding: 0 16px;
+    background: #050504;
+    color: #f4efe7;
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 5px;
+    font: inherit;
+  }
+  #quote select:focus,
+  #quote input:focus,
+  #quote textarea:focus {
+    outline: none;
+    border-color: #f2a23a;
+  }
   @media (max-width: 700px) {
-    #merch .merch-grid {
-      grid-template-columns: 1fr;
+    #merch .merch-grid { grid-template-columns: 1fr; }
+    #gallery .build-grid { grid-template-columns: 1fr; }
+  }
+  @media (min-width: 701px) {
+    .site-header { height: 72px !important; padding: 0 60px !important; }
+    .hero {
+      min-height: calc(100vh - 72px) !important;
+      padding: 0 40px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      text-align: center !important;
+      position: relative !important;
+      overflow: hidden !important;
     }
+    .hero-bg-logo {
+      position: absolute !important;
+      top: 90px !important;
+      left: 50% !important;
+      transform: translateX(-50%) !important;
+      width: 560px !important;
+      max-width: 38vw !important;
+      opacity: 0.48 !important;
+      z-index: 0 !important;
+      pointer-events: none !important;
+    }
+    .hero-content {
+      position: relative !important;
+      z-index: 1 !important;
+      max-width: 850px !important;
+      margin-top: 250px !important;
+    }
+    .hero .eyebrow { font-size: 0.78rem !important; letter-spacing: 0.24em !important; margin-bottom: 16px !important; }
+    .hero h1 { font-size: clamp(4.1rem, 5vw, 5.6rem) !important; line-height: 0.94 !important; letter-spacing: -0.05em !important; max-width: 860px !important; margin: 0 auto 26px !important; }
+    .hero-subtitle { max-width: 690px !important; margin: 0 auto 32px !important; font-size: 1.08rem !important; line-height: 1.55 !important; }
+    .button-row { display: flex !important; justify-content: center !important; gap: 18px !important; }
+    .button { min-width: 180px !important; min-height: 54px !important; padding: 15px 24px !important; }
   }
-/* DESKTOP HERO FINAL VERSION */
-@media (min-width: 701px) {
-  .hero {
-    min-height: calc(100vh - 82px) !important;
-    padding: 90px 40px 110px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    text-align: center !important;
-  }
-
-  .hero-bg-logo {
-    top: 70px !important;
-    width: 680px !important;
-    max-width: 42vw !important;
-    opacity: 0.42 !important;
-  }
-
-  .hero-content {
-    max-width: 900px !important;
-    margin-top: 190px !important;
-  }
-
-  .hero .eyebrow {
-    font-size: 0.78rem !important;
-    letter-spacing: 0.24em !important;
-    margin-bottom: 18px !important;
-  }
-
-  .hero h1 {
-    font-size: clamp(4.6rem, 5.6vw, 6.4rem) !important;
-    line-height: 0.92 !important;
-    letter-spacing: -0.055em !important;
-    margin: 0 auto 30px !important;
-    max-width: 930px !important;
-  }
-
-  .hero-subtitle {
-    max-width: 720px !important;
-    margin: 0 auto 36px !important;
-    font-size: 1.12rem !important;
-    line-height: 1.6 !important;
-  }
-
-  .button-row {
-    justify-content: center !important;
-    gap: 18px !important;
-  }
-
-  .button {
-    min-width: 190px !important;
-    min-height: 56px !important;
-    padding: 16px 24px !important;
-  }
-}
-
-  .button-row {
-    justify-content: center !important;
-    gap: 18px !important;
-  }
-
-  .button {
-    min-width: 180px !important;
-    min-height: 54px !important;
-  }
-}
-</style>
-  <style>
   #gallery .build-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 22px;
     margin-top: 34px;
   }
-
   #gallery .build-card {
-    min-height: 260px;
-    padding: 28px;
     border: 1px solid rgba(255,255,255,.14);
     background: linear-gradient(145deg, rgba(217,130,43,.16), rgba(255,255,255,.03));
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    overflow: hidden;
+    border-radius: 4px;
   }
-
-  #gallery .build-card span {
+  #gallery .build-card img { width: 100%; height: 200px; object-fit: cover; }
+  #gallery .build-card .build-body { padding: 20px 24px 24px; flex: 1; }
+  #gallery .build-card span { color: #f2a23a; font-weight: 900; letter-spacing: .18em; font-size: .8rem; }
+  #gallery .build-card h3 { text-transform: uppercase; font-size: 1.2rem; margin: 10px 0 8px; }
+  #gallery .build-card p { color: #c9c2b8; line-height: 1.55; font-size: .9rem; }
+  .footer-social a {
     color: #f2a23a;
-    font-weight: 900;
-    letter-spacing: .18em;
-    margin-bottom: auto;
-  }
-
-  #gallery .build-card h3 {
+    text-decoration: none;
+    font-size: .85rem;
+    letter-spacing: .08em;
     text-transform: uppercase;
-    font-size: 1.35rem;
-    margin-bottom: 12px;
+    font-weight: 700;
   }
-
-  #gallery .build-card p {
-    color: #c9c2b8;
-    line-height: 1.55;
-  }
-
-  @media (max-width: 700px) {
-    #gallery .build-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-    /* DESKTOP TOP HERO FIX ONLY */
-@media (min-width: 701px) {
-  .site-header {
-    height: 72px !important;
-    padding: 0 60px !important;
-  }
-
-  .hero {
-    min-height: calc(100vh - 72px) !important;
-    padding: 0 40px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    text-align: center !important;
-    position: relative !important;
-    overflow: hidden !important;
-  }
-
-  .hero-bg-logo {
-    position: absolute !important;
-    top: 90px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    width: 560px !important;
-    max-width: 38vw !important;
-    opacity: 0.48 !important;
-    z-index: 0 !important;
-    pointer-events: none !important;
-  }
-
-  .hero-content {
-    position: relative !important;
-    z-index: 1 !important;
-    max-width: 850px !important;
-    margin-top: 250px !important;
-  }
-
-  .hero .eyebrow {
-    font-size: 0.78rem !important;
-    letter-spacing: 0.24em !important;
-    margin-bottom: 16px !important;
-  }
-
-  .hero h1 {
-    font-size: clamp(4.1rem, 5vw, 5.6rem) !important;
-    line-height: 0.94 !important;
-    letter-spacing: -0.05em !important;
-    max-width: 860px !important;
-    margin: 0 auto 26px !important;
-  }
-
-  .hero-subtitle {
-    max-width: 690px !important;
-    margin: 0 auto 32px !important;
-    font-size: 1.08rem !important;
-    line-height: 1.55 !important;
-  }
-
-  .button-row {
-    display: flex !important;
-    justify-content: center !important;
-    gap: 18px !important;
-  }
-
-  .button {
-    min-width: 180px !important;
-    min-height: 54px !important;
-    padding: 15px 24px !important;
-  }
-}
-</style>
+  .footer-social a:hover { text-decoration: underline; }
+  </style>
 </head>
 <body>
   <header class="site-header">
     <a class="brand" href="#">
       <img id="site-logo" class="site-logo" style="display:none;" alt="JT Offroad Logo">
-<span data-cms="business_name">JT Offroad</span>
+      <span id="business-name">JT Offroad</span>
     </a>
     <nav>
       <a href="#services">Services</a>
@@ -256,20 +149,14 @@
 
   <main>
     <section class="hero">
-      <img
-  class="hero-bg-logo"
-  src="/images/uploads/5894e22396f94596692fe72cfecb4e82cef6409f3af68ebd9e9eb5210cc900d9.png"
-  alt=""
-/>
-      
+      <img id="hero-bg-logo" class="hero-bg-logo" src="" alt="">
       <div class="hero-content">
-    
-        <p class="eyebrow" data-cms="location">Northern California</p>
-        <h1 data-cms="headline">Built Beyond the Pavement</h1>
-        <p class="hero-subtitle" data-cms="subheadline">Custom off-road builds, suspension upgrades, lighting, armor, recovery gear, and adventure-ready vehicles built for Northern California.</p>
+        <p class="eyebrow" id="hero-location"></p>
+        <h1 id="hero-headline"></h1>
+        <p class="hero-subtitle" id="hero-subheadline"></p>
         <div class="button-row">
-          <a class="button primary" data-cms="primary_button" href="#quote">Request a Quote</a>
-          <a class="button secondary" data-cms="secondary_button" href="#services">View Services</a>
+          <a class="button primary" id="primary-btn" href="#quote">Request a Quote</a>
+          <a class="button secondary" id="secondary-btn" href="#services">View Services</a>
         </div>
       </div>
     </section>
@@ -277,9 +164,9 @@
     <section class="section split" id="about">
       <div>
         <p class="eyebrow">About</p>
-        <h2 data-cms="about_title">Northern California Off-Road Builds</h2>
+        <h2 id="about-title"></h2>
       </div>
-      <p data-cms="about_text">JT Offroad builds practical, reliable, and trail-ready vehicles for people who want more than stock. From suspension upgrades to complete adventure builds, every setup is built around how the vehicle will actually be used.</p>
+      <p id="about-text"></p>
     </section>
 
     <section class="section" id="services">
@@ -287,176 +174,201 @@
         <p class="eyebrow">Services</p>
         <h2>What We Build</h2>
       </div>
-      <div class="card-grid" id="services-list">
-  <article class="card">
-    <h3>Suspension & Lift Kits</h3>
-    <p>Lift kits, leveling kits, shocks, coilovers, upper control arms, and complete suspension upgrades.</p>
-  </article>
-
-  <article class="card">
-    <h3>Wheels & Tires</h3>
-    <p>Wheel packages, tire upgrades, fitment guidance, and off-road-ready setups.</p>
-  </article>
-
-  <article class="card">
-    <h3>Armor & Protection</h3>
-    <p>Bumpers, skid plates, rock sliders, bed protection, and underbody armor.</p>
-  </article>
-
-  <article class="card">
-    <h3>Lighting & Electrical</h3>
-    <p>Light bars, ditch lights, auxiliary lighting, switch panels, batteries, and clean wiring.</p>
-  </article>
-
-  <article class="card">
-    <h3>Recovery Equipment</h3>
-    <p>Winches, recovery points, onboard air systems, and trail recovery setups.</p>
-  </article>
-
-  <article class="card">
-    <h3>Overland Builds</h3>
-    <p>Roof racks, bed racks, storage, camping systems, and full adventure build planning.</p>
-  </article>
-</div>
+      <div class="card-grid" id="services-list"></div>
     </section>
 
     <section class="section gallery" id="gallery">
       <div class="section-heading">
         <p class="eyebrow">Build Gallery</p>
         <h2>Featured Builds</h2>
-        <p>Add build photos in the CMS media tab, then we can wire this section to pull them into the site.</p>
       </div>
-      <div class="build-grid">
-  <article class="build-card">
-    <span>01</span>
-    <h3>Tacoma Builds</h3>
-    <p>Suspension, wheels, tires, lighting, armor, and trail-ready upgrades.</p>
-  </article>
-
-  <article class="build-card">
-    <span>02</span>
-    <h3>Suspension Installs</h3>
-    <p>Lift kits, coilovers, shocks, control arms, and complete setup guidance.</p>
-  </article>
-
-  <article class="build-card">
-    <span>03</span>
-    <h3>Adventure Setups</h3>
-    <p>Recovery gear, racks, storage, lighting, and overland-ready accessories.</p>
-  </article>
-</div>
+      <div class="build-grid" id="gallery-list"></div>
     </section>
 
     <section class="section" id="merch">
-  <div class="section-heading">
-    <p class="eyebrow">Merch</p>
-    <h2>JT Offroad Gear</h2>
-    <p>Apparel and decals are coming soon. Built for the dirt, the shop, and the weekend trail.</p>
-  </div>
-
-  <div class="merch-grid">
-    <article class="merch-card">
-      <span>Coming Soon</span>
-      <h3>Built Beyond Hoodie</h3>
-      <p>Premium hoodie with JT Offroad branding.</p>
-    </article>
-
-    <article class="merch-card">
-      <span>Coming Soon</span>
-      <h3>JT Offroad Tee</h3>
-      <p>Everyday shop and trail shirt with rugged branding.</p>
-    </article>
-
-    <article class="merch-card">
-      <span>Coming Soon</span>
-      <h3>Decals & Stickers</h3>
-      <p>Logo decals for trucks, toolboxes, windows, and gear.</p>
-    </article>
-  </div>
-</section>
+      <div class="section-heading">
+        <p class="eyebrow">Merch</p>
+        <h2>JT Offroad Gear</h2>
+        <p>Apparel and decals built for the dirt, the shop, and the weekend trail.</p>
+      </div>
+      <div class="merch-grid" id="merch-list"></div>
+    </section>
 
     <section class="section reviews" id="reviews">
-  <div class="section-heading">
-    <p class="eyebrow">Reviews</p>
-    <h2>What Customers Say</h2>
-    <p>Real reviews coming soon. Here is the kind of service JT Offroad is built around.</p>
-  </div>
-
-  <div class="review-grid">
-    <article class="review-card">
-      <p>“Clean work, honest recommendations, and a setup built around how the vehicle will actually be used.”</p>
-      <strong>— Future Customer</strong>
-    </article>
-
-    <article class="review-card">
-      <p>“Professional install, clear communication, and attention to detail from start to finish.”</p>
-      <strong>— Future Customer</strong>
-    </article>
-
-    <article class="review-card">
-      <p>“The build felt practical, reliable, and trail-ready without unnecessary extras.”</p>
-      <strong>— Future Customer</strong>
-    </article>
-  </div>
-</section>
+      <div class="section-heading">
+        <p class="eyebrow">Reviews</p>
+        <h2>What Customers Say</h2>
+      </div>
+      <div class="review-grid" id="reviews-list"></div>
+    </section>
 
     <section class="section quote" id="quote">
       <div class="quote-card">
         <p class="eyebrow">Start Your Build</p>
         <h2>Request a Quote</h2>
-        <p data-cms="quote_intro">Tell us about your vehicle and what you want to build. We’ll follow up with recommendations and next steps.</p>
+        <p id="quote-intro"></p>
         <form name="quote" method="POST" data-netlify="true">
           <input type="hidden" name="form-name" value="quote">
           <label>Name <input name="name" required></label>
           <label>Phone <input name="phone"></label>
           <label>Email <input type="email" name="email" required></label>
-          <label>Vehicle
-  <input name="vehicle" placeholder="Year / Make / Model">
-</label>
-
-<label>Service Needed
-  <select name="service">
-    <option value="">Select a service</option>
-    <option>Suspension & Lift Kits</option>
-    <option>Wheels & Tires</option>
-    <option>Armor & Protection</option>
-    <option>Lighting & Electrical</option>
-    <option>Recovery Equipment</option>
-    <option>Overland Build</option>
-    <option>Not Sure Yet</option>
-  </select>
-</label>
-
-<label>Budget Range
-  <select name="budget">
-    <option value="">Select a budget range</option>
-    <option>Under $1,000</option>
-    <option>$1,000 - $2,500</option>
-    <option>$2,500 - $5,000</option>
-    <option>$5,000 - $10,000</option>
-    <option>$10,000+</option>
-    <option>Not Sure Yet</option>
-  </select>
-</label>
-
-<label>Build Goals
-  <textarea name="message" rows="5" placeholder="Tell us what you want to build, how you use the vehicle, and what problems you want to solve."></textarea>
-</label>
-
-<button class="button primary" type="submit">Submit Build Request</button>
+          <label>Vehicle <input name="vehicle" placeholder="Year / Make / Model"></label>
+          <label>Service Needed
+            <select name="service">
+              <option value="">Select a service</option>
+              <option>Suspension &amp; Lift Kits</option>
+              <option>Wheels &amp; Tires</option>
+              <option>Armor &amp; Protection</option>
+              <option>Lighting &amp; Electrical</option>
+              <option>Recovery Equipment</option>
+              <option>Overland Build</option>
+              <option>Not Sure Yet</option>
+            </select>
+          </label>
+          <label>Budget Range
+            <select name="budget">
+              <option value="">Select a budget range</option>
+              <option>Under $1,000</option>
+              <option>$1,000 - $2,500</option>
+              <option>$2,500 - $5,000</option>
+              <option>$5,000 - $10,000</option>
+              <option>$10,000+</option>
+              <option>Not Sure Yet</option>
+            </select>
+          </label>
+          <label>Build Goals
+            <textarea name="message" rows="5" placeholder="Tell us what you want to build, how you use the vehicle, and what problems you want to solve."></textarea>
+          </label>
+          <button class="button primary" type="submit">Submit Build Request</button>
         </form>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-  <strong>JT Offroad</strong>
-  <div class="footer-links">
-    <a href="tel:7192313868">719-231-3868</a>
-    <a href="#quote">Request a Quote</a>
-    <a href="#services">View Services</a>
-  </div>
-</footer>
+    <strong id="footer-name">JT Offroad</strong>
+    <div class="footer-links">
+      <a id="footer-phone" href="#">—</a>
+      <a href="#quote">Request a Quote</a>
+      <a href="#services">View Services</a>
+    </div>
+    <div class="footer-social" id="footer-social"></div>
+  </footer>
+
+  <script>
+  // ─── Load all content from CMS site.json ───────────────────────────────────
+  fetch('/content/site.json')
+    .then(r => r.json())
+    .then(d => {
+      // ── Business name & logo ──
+      const nameEl = document.getElementById('business-name');
+      if (d.business_name) nameEl.textContent = d.business_name;
+      document.getElementById('footer-name').textContent = d.business_name || 'JT Offroad';
+      document.title = (d.business_name || 'JT Offroad') + ' | Built Beyond the Pavement';
+
+      const logo = document.getElementById('site-logo');
+      if (d.logo_image) {
+        logo.src = d.logo_image;
+        logo.style.display = 'block';
+        nameEl.style.display = 'none';
+      }
+
+      // ── Hero ──
+      const heroBg = document.getElementById('hero-bg-logo');
+      if (d.logo_image) heroBg.src = d.logo_image;
+      else heroBg.src = '/images/uploads/5894e22396f94596692fe72cfecb4e82cef6409f3af68ebd9e9eb5210cc900d9.png';
+
+      if (d.hero_image) {
+        document.querySelector('.hero').style.backgroundImage = `url(${d.hero_image})`;
+      }
+
+      setText('hero-location', d.location);
+      setText('hero-headline', d.headline);
+      setText('hero-subheadline', d.subheadline);
+      setText('about-title', d.about_title);
+      setText('about-text', d.about_text);
+      setText('quote-intro', d.quote_intro);
+
+      // ── Buttons ──
+      const primaryBtn = document.getElementById('primary-btn');
+      const secondaryBtn = document.getElementById('secondary-btn');
+      if (d.primary_button_text) primaryBtn.textContent = d.primary_button_text;
+      if (d.primary_button_link) primaryBtn.href = d.primary_button_link;
+      if (d.secondary_button_text) secondaryBtn.textContent = d.secondary_button_text;
+      if (d.secondary_button_link) secondaryBtn.href = d.secondary_button_link;
+
+      // ── Phone ──
+      const phoneEl = document.getElementById('footer-phone');
+      if (d.phone) {
+        phoneEl.textContent = d.phone;
+        phoneEl.href = 'tel:' + d.phone.replace(/\D/g, '');
+      } else {
+        phoneEl.style.display = 'none';
+      }
+
+      // ── Instagram ──
+      const social = document.getElementById('footer-social');
+      if (d.instagram) {
+        const handle = d.instagram.startsWith('http') ? d.instagram : 'https://instagram.com/' + d.instagram.replace('@','');
+        social.innerHTML = `<a href="${handle}" target="_blank" rel="noopener">Instagram</a>`;
+      }
+
+      // ── Services ──
+      const servicesList = document.getElementById('services-list');
+      if (d.services && d.services.length) {
+        servicesList.innerHTML = d.services.map(s => `
+          <article class="card">
+            <h3>${s.title}</h3>
+            <p>${s.description}</p>
+          </article>`).join('');
+      }
+
+      // ── Gallery ──
+      const galleryList = document.getElementById('gallery-list');
+      if (d.gallery && d.gallery.length) {
+        galleryList.innerHTML = d.gallery.map((b, i) => `
+          <article class="build-card">
+            ${b.image ? `<img src="${b.image}" alt="${b.title}">` : ''}
+            <div class="build-body">
+              <span>${String(i+1).padStart(2,'0')}</span>
+              <h3>${b.title}</h3>
+              ${b.description ? `<p>${b.description}</p>` : ''}
+            </div>
+          </article>`).join('');
+      } else {
+        galleryList.innerHTML = '<p style="color:#c9c2b8;">Build photos coming soon. Add them in the CMS under Build Gallery.</p>';
+      }
+
+      // ── Merch ──
+      const merchList = document.getElementById('merch-list');
+      if (d.merch && d.merch.length) {
+        merchList.innerHTML = d.merch.map(m => `
+          <article class="merch-card">
+            ${m.image ? `<img src="${m.image}" alt="${m.name}">` : '<span>Coming Soon</span>'}
+            <h3>${m.name}</h3>
+            <p>${m.description}</p>
+            ${m.link ? `<a href="${m.link}" target="_blank">Shop Now</a>` : ''}
+          </article>`).join('');
+      }
+
+      // ── Reviews ──
+      const reviewsList = document.getElementById('reviews-list');
+      if (d.reviews && d.reviews.length) {
+        reviewsList.innerHTML = d.reviews.map(r => `
+          <article class="review-card">
+            <p>"${r.text}"</p>
+            <strong>— ${r.name}</strong>
+          </article>`).join('');
+      } else {
+        reviewsList.innerHTML = '<p style="color:#c9c2b8;text-align:center;">Customer reviews coming soon.</p>';
+      }
+    })
+    .catch(() => console.warn('Could not load site.json — using default content'));
+
+  function setText(id, val) {
+    if (val) document.getElementById(id).textContent = val;
+  }
+  </script>
 
   <script src="script.js"></script>
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
