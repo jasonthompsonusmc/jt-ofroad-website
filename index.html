@@ -7,151 +7,144 @@
   <link rel="stylesheet" href="styles.css">
   <style>
 
-  /* ── HEADER MOBILE FIX ── */
+  /* ══════════════════════════════════════
+     HEADER — single row always
+  ══════════════════════════════════════ */
   .site-header {
     display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
     align-items: center !important;
     justify-content: space-between !important;
+    height: 64px !important;
     padding: 0 20px !important;
-    height: 60px !important;
     background: #080807 !important;
     position: sticky !important;
     top: 0 !important;
     z-index: 100 !important;
+    box-sizing: border-box !important;
   }
 
   .brand {
     display: flex !important;
     align-items: center !important;
     text-decoration: none !important;
+    flex-shrink: 0 !important;
   }
 
+  /* mix-blend-mode: lighten makes black disappear on dark bg */
   .site-logo {
-    height: 42px !important;
+    height: 46px !important;
     width: auto !important;
     display: block !important;
+    mix-blend-mode: lighten !important;
     background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
   }
 
   #business-name {
     color: #f4efe7;
     font-weight: 900;
-    font-size: 1.1rem;
-    letter-spacing: 0.05em;
+    font-size: 1rem;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
   }
 
   .site-header nav {
     display: flex !important;
     flex-direction: row !important;
-    gap: 18px !important;
+    flex-wrap: nowrap !important;
     align-items: center !important;
+    gap: 16px !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
   .site-header nav a {
-    font-size: 0.78rem !important;
+    font-size: 0.72rem !important;
     letter-spacing: 0.1em !important;
     text-transform: uppercase !important;
     white-space: nowrap !important;
+    padding: 0 !important;
   }
 
-  /* ── HERO ── */
+  /* ══════════════════════════════════════
+     HERO — full viewport, centered
+  ══════════════════════════════════════ */
   .hero {
-    position: relative;
-    overflow: hidden;
-    background: #080807;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+    position: relative !important;
+    overflow: hidden !important;
+    background: #080807 !important;
+    min-height: calc(100vh - 64px) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
   }
 
   .hero-photo-bg {
-    position: absolute;
-    inset: 0;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    opacity: 0.42;
-    z-index: 0;
+    position: absolute !important;
+    inset: 0 !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    opacity: 0.42 !important;
+    z-index: 0 !important;
   }
 
   .hero-photo-bg::after {
-    content: '';
-    position: absolute;
-    inset: 0;
+    content: '' !important;
+    position: absolute !important;
+    inset: 0 !important;
     background: linear-gradient(
       to bottom,
-      rgba(8,8,7,0.15) 0%,
-      rgba(8,8,7,0.35) 60%,
-      rgba(8,8,7,0.65) 100%
-    );
+      rgba(8,8,7,0.1) 0%,
+      rgba(8,8,7,0.3) 60%,
+      rgba(8,8,7,0.6) 100%
+    ) !important;
   }
 
-  /* Mobile: watermark much smaller and more faded */
   .hero-bg-logo {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 260px;
-    max-width: 70vw;
-    opacity: 0.07;
-    z-index: 1;
-    pointer-events: none;
-    user-select: none;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 70vw !important;
+    max-width: 560px !important;
+    opacity: 0.08 !important;
+    z-index: 1 !important;
+    pointer-events: none !important;
+    user-select: none !important;
   }
 
   .hero-content {
-    position: relative;
-    z-index: 2;
-    padding: 60px 24px 40px;
-    width: 100%;
+    position: relative !important;
+    z-index: 2 !important;
+    padding: 40px 28px !important;
+    width: 100% !important;
+    max-width: 900px !important;
   }
 
-  /* ── DESKTOP OVERRIDES ── */
+  /* ══════════════════════════════════════
+     DESKTOP
+  ══════════════════════════════════════ */
   @media (min-width: 701px) {
     .site-header {
       height: 72px !important;
       padding: 0 60px !important;
     }
+    .site-logo { height: 52px !important; }
+    .site-header nav { gap: 36px !important; }
+    .site-header nav a { font-size: 0.88rem !important; }
 
-    .site-logo {
-      height: 52px !important;
-    }
-
-    .site-header nav {
-      gap: 32px !important;
-    }
-
-    .site-header nav a {
-      font-size: 0.88rem !important;
-    }
-
-    .hero {
-      min-height: 100vh !important;
-      padding: 0 40px !important;
-    }
+    .hero { min-height: calc(100vh - 72px) !important; }
 
     .hero-bg-logo {
-      width: 640px !important;
-      max-width: 46vw !important;
+      width: 46vw !important;
+      max-width: 640px !important;
       opacity: 0.08 !important;
     }
 
-    .hero-content {
-      max-width: 900px !important;
-      padding: 0 !important;
-    }
-
-    .hero .eyebrow {
-      font-size: 0.78rem !important;
-      letter-spacing: 0.24em !important;
-      margin-bottom: 16px !important;
-    }
+    .hero-content { padding: 0 !important; }
 
     .hero h1 {
       font-size: clamp(4.1rem, 5vw, 5.8rem) !important;
@@ -181,7 +174,9 @@
     }
   }
 
-  /* ── GALLERY ── */
+  /* ══════════════════════════════════════
+     GALLERY
+  ══════════════════════════════════════ */
   #gallery .build-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -202,7 +197,9 @@
   #gallery .build-card h3 { text-transform: uppercase; font-size: 1.2rem; margin: 10px 0 8px; }
   #gallery .build-card p { color: #c9c2b8; line-height: 1.55; font-size: .9rem; }
 
-  /* ── MERCH ── */
+  /* ══════════════════════════════════════
+     MERCH
+  ══════════════════════════════════════ */
   #merch .merch-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -215,34 +212,15 @@
     border: 1px solid rgba(255,255,255,.14);
     background: linear-gradient(145deg, rgba(217,130,43,.12), rgba(255,255,255,.03));
   }
-  #merch .merch-card img {
-    width: 100%;
-    height: 160px;
-    object-fit: cover;
-    border-radius: 4px;
-    margin-bottom: 16px;
-  }
-  #merch .merch-card span {
-    color: #f2a23a;
-    text-transform: uppercase;
-    font-weight: 900;
-    letter-spacing: .15em;
-    font-size: .75rem;
-  }
+  #merch .merch-card img { width: 100%; height: 160px; object-fit: cover; border-radius: 4px; margin-bottom: 16px; }
+  #merch .merch-card span { color: #f2a23a; text-transform: uppercase; font-weight: 900; letter-spacing: .15em; font-size: .75rem; }
   #merch .merch-card h3 { margin-top: 14px; text-transform: uppercase; font-size: 1.3rem; }
   #merch .merch-card p { color: #c9c2b8; line-height: 1.55; }
-  #merch .merch-card a {
-    display: inline-block;
-    margin-top: 14px;
-    color: #f2a23a;
-    text-decoration: none;
-    font-weight: 700;
-    font-size: .85rem;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-  }
+  #merch .merch-card a { display: inline-block; margin-top: 14px; color: #f2a23a; text-decoration: none; font-weight: 700; font-size: .85rem; letter-spacing: .08em; text-transform: uppercase; }
 
-  /* ── QUOTE ── */
+  /* ══════════════════════════════════════
+     QUOTE
+  ══════════════════════════════════════ */
   #quote select {
     width: 100%;
     min-height: 54px;
@@ -253,30 +231,26 @@
     border-radius: 5px;
     font: inherit;
   }
-  #quote select:focus,
-  #quote input:focus,
-  #quote textarea:focus {
+  #quote select:focus, #quote input:focus, #quote textarea:focus {
     outline: none;
     border-color: #f2a23a;
   }
 
-  /* ── MOBILE GRID OVERRIDES ── */
+  /* ══════════════════════════════════════
+     MOBILE GRID
+  ══════════════════════════════════════ */
   @media (max-width: 700px) {
     #merch .merch-grid { grid-template-columns: 1fr; }
     #gallery .build-grid { grid-template-columns: 1fr; }
   }
 
-  /* ── FOOTER SOCIAL ── */
+  /* ══════════════════════════════════════
+     FOOTER
+  ══════════════════════════════════════ */
   .footer-social { margin-top: 10px; }
-  .footer-social a {
-    color: #f2a23a;
-    text-decoration: none;
-    font-size: .85rem;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    font-weight: 700;
-  }
+  .footer-social a { color: #f2a23a; text-decoration: none; font-size: .85rem; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; }
   .footer-social a:hover { text-decoration: underline; }
+
   </style>
 </head>
 <body>
@@ -447,7 +421,7 @@
 
       const social = document.getElementById('footer-social');
       if (d.instagram) {
-        const handle = d.instagram.startsWith('http') ? d.instagram : 'https://instagram.com/' + d.instagram.replace('@', '');
+        const handle = d.instagram.startsWith('http') ? d.instagram : 'https://instagram.com/' + d.instagram.replace('@','');
         social.innerHTML = '<a href="' + handle + '" target="_blank" rel="noopener">@ Instagram</a>';
       }
 
@@ -460,7 +434,7 @@
 
       const galleryList = document.getElementById('gallery-list');
       if (d.gallery && d.gallery.length) {
-        galleryList.innerHTML = d.gallery.map((b, i) =>
+        galleryList.innerHTML = d.gallery.map((b,i) =>
           '<article class="build-card">' +
           (b.image ? '<img src="' + b.image + '" alt="' + b.title + '">' : '') +
           '<div class="build-body"><span>' + String(i+1).padStart(2,'0') + '</span>' +
