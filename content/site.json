@@ -4,23 +4,14 @@
   "quote_intro": "Tell us about your vehicle and what you want to build. We’ll follow up with recommendations and next steps.",
   "primary_button_link": "#quote",
   "business_name": "JT OFFROAD",
-  "phone": "719-231-3868",
+  "phone": "",
   "secondary_button_text": "View Services",
   "instagram": "",
   "subheadline": "Custom off-road builds, suspension upgrades, lighting, armor, recovery gear, and adventure-ready vehicles built for Northern California.",
-  "headline": "Northern California Adventure Builds",
+  "headline": "Built Beyond the Pavement",
   "location": "Northern California",
-  "hero_image": "/images/uploads/5894e22396f94596692fe72cfecb4e82cef6409f3af68ebd9e9eb5210cc900d9.png",
-  "reviews": [
-    {
-      "name": "Customer Name",
-      "text": "JT Offroad transformed my truck exactly how I wanted it. Clean work, clear communication, and a solid setup."
-    },
-    {
-      "name": "Customer Name",
-      "text": "Professional install, fair recommendations, and attention to detail. Highly recommend."
-    }
-  ],
+  "hero_image": "",
+  "reviews": [],
   "secondary_button_link": "#services",
   "email": "",
   "primary_button_text": "Request a Quote",
