@@ -45,13 +45,19 @@
   "merch": [
     {
       "name": "Built Beyond Hoodie",
-      "description": "Premium hoodie with JT Offroad branding.",
-      "link": "#"
+      "description": "Premium hoodie with JT Offroad branding!",
+      "link": "#",
+      "image": "/images/uploads/screenshot-2026-06-06-at-9.32.42 pm.png"
     },
     {
       "name": "JT Offroad Decal",
       "description": "Vinyl decal for windows, toolboxes, and rigs.",
       "link": "#"
+    },
+    {
+      "name": "Built Beyond Shirt",
+      "image": "/images/uploads/screenshot-2026-06-06-at-9.31.53 pm.png",
+      "description": "Premium shirt with JT Offroad branding!"
     }
   ]
 }
