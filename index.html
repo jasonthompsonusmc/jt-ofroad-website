@@ -6,70 +6,58 @@
   <title>JT Offroad | Built Beyond the Pavement</title>
   <link rel="stylesheet" href="styles.css">
   <style>
-  #merch .merch-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 22px;
-    margin-top: 34px;
-  }
-  #merch .merch-card {
-    min-height: 230px;
-    padding: 28px;
-    border: 1px solid rgba(255,255,255,.14);
-    background: linear-gradient(145deg, rgba(217,130,43,.12), rgba(255,255,255,.03));
-  }
-  #merch .merch-card img {
-    width: 100%;
-    height: 160px;
-    object-fit: cover;
-    border-radius: 4px;
-    margin-bottom: 16px;
-  }
-  #merch .merch-card span {
-    color: #f2a23a;
-    text-transform: uppercase;
-    font-weight: 900;
-    letter-spacing: .15em;
-    font-size: .75rem;
-  }
-  #merch .merch-card h3 {
-    margin-top: 14px;
-    text-transform: uppercase;
-    font-size: 1.3rem;
-  }
-  #merch .merch-card p { color: #c9c2b8; line-height: 1.55; }
-  #merch .merch-card a {
-    display: inline-block;
-    margin-top: 14px;
-    color: #f2a23a;
-    text-decoration: none;
-    font-weight: 700;
-    font-size: .85rem;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-  }
-  #quote select {
-    width: 100%;
-    min-height: 54px;
-    padding: 0 16px;
-    background: #050504;
-    color: #f4efe7;
-    border: 1px solid rgba(255,255,255,.14);
-    border-radius: 5px;
-    font: inherit;
-  }
-  #quote select:focus,
-  #quote input:focus,
-  #quote textarea:focus {
-    outline: none;
-    border-color: #f2a23a;
-  }
-  @media (max-width: 700px) {
-    #merch .merch-grid { grid-template-columns: 1fr; }
-    #gallery .build-grid { grid-template-columns: 1fr; }
+
+  /* ── HEADER MOBILE FIX ── */
+  .site-header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 0 20px !important;
+    height: 60px !important;
+    background: #080807 !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 100 !important;
   }
 
-  /* ── Hero ── */
+  .brand {
+    display: flex !important;
+    align-items: center !important;
+    text-decoration: none !important;
+  }
+
+  .site-logo {
+    height: 42px !important;
+    width: auto !important;
+    display: block !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  #business-name {
+    color: #f4efe7;
+    font-weight: 900;
+    font-size: 1.1rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .site-header nav {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 18px !important;
+    align-items: center !important;
+  }
+
+  .site-header nav a {
+    font-size: 0.78rem !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+    white-space: nowrap !important;
+  }
+
+  /* ── HERO ── */
   .hero {
     position: relative;
     overflow: hidden;
@@ -81,7 +69,6 @@
     text-align: center;
   }
 
-  /* Photo background — bumped to 0.42 for better visibility */
   .hero-photo-bg {
     position: absolute;
     inset: 0;
@@ -92,7 +79,6 @@
     z-index: 0;
   }
 
-  /* Subtle dark gradient so text always reads */
   .hero-photo-bg::after {
     content: '';
     position: absolute;
@@ -105,15 +91,15 @@
     );
   }
 
-  /* Logo watermark — very subtle ghost */
+  /* Mobile: watermark much smaller and more faded */
   .hero-bg-logo {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 600px;
-    max-width: 50vw;
-    opacity: 0.09;
+    width: 260px;
+    max-width: 70vw;
+    opacity: 0.07;
     z-index: 1;
     pointer-events: none;
     user-select: none;
@@ -122,11 +108,28 @@
   .hero-content {
     position: relative;
     z-index: 2;
-    padding: 40px 24px;
+    padding: 60px 24px 40px;
+    width: 100%;
   }
 
+  /* ── DESKTOP OVERRIDES ── */
   @media (min-width: 701px) {
-    .site-header { height: 72px !important; padding: 0 60px !important; }
+    .site-header {
+      height: 72px !important;
+      padding: 0 60px !important;
+    }
+
+    .site-logo {
+      height: 52px !important;
+    }
+
+    .site-header nav {
+      gap: 32px !important;
+    }
+
+    .site-header nav a {
+      font-size: 0.88rem !important;
+    }
 
     .hero {
       min-height: 100vh !important;
@@ -178,7 +181,7 @@
     }
   }
 
-  /* ── Gallery ── */
+  /* ── GALLERY ── */
   #gallery .build-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -199,7 +202,71 @@
   #gallery .build-card h3 { text-transform: uppercase; font-size: 1.2rem; margin: 10px 0 8px; }
   #gallery .build-card p { color: #c9c2b8; line-height: 1.55; font-size: .9rem; }
 
-  /* ── Footer social ── */
+  /* ── MERCH ── */
+  #merch .merch-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+    margin-top: 34px;
+  }
+  #merch .merch-card {
+    min-height: 230px;
+    padding: 28px;
+    border: 1px solid rgba(255,255,255,.14);
+    background: linear-gradient(145deg, rgba(217,130,43,.12), rgba(255,255,255,.03));
+  }
+  #merch .merch-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 16px;
+  }
+  #merch .merch-card span {
+    color: #f2a23a;
+    text-transform: uppercase;
+    font-weight: 900;
+    letter-spacing: .15em;
+    font-size: .75rem;
+  }
+  #merch .merch-card h3 { margin-top: 14px; text-transform: uppercase; font-size: 1.3rem; }
+  #merch .merch-card p { color: #c9c2b8; line-height: 1.55; }
+  #merch .merch-card a {
+    display: inline-block;
+    margin-top: 14px;
+    color: #f2a23a;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: .85rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  /* ── QUOTE ── */
+  #quote select {
+    width: 100%;
+    min-height: 54px;
+    padding: 0 16px;
+    background: #050504;
+    color: #f4efe7;
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 5px;
+    font: inherit;
+  }
+  #quote select:focus,
+  #quote input:focus,
+  #quote textarea:focus {
+    outline: none;
+    border-color: #f2a23a;
+  }
+
+  /* ── MOBILE GRID OVERRIDES ── */
+  @media (max-width: 700px) {
+    #merch .merch-grid { grid-template-columns: 1fr; }
+    #gallery .build-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ── FOOTER SOCIAL ── */
   .footer-social { margin-top: 10px; }
   .footer-social a {
     color: #f2a23a;
@@ -339,14 +406,11 @@
   fetch('/content/site.json')
     .then(r => r.json())
     .then(d => {
-
-      // ── Business name ──
       const nameEl = document.getElementById('business-name');
       if (d.business_name) nameEl.textContent = d.business_name;
       document.getElementById('footer-name').textContent = d.business_name || 'JT Offroad';
       document.title = (d.business_name || 'JT Offroad') + ' | Built Beyond the Pavement';
 
-      // ── Header logo ──
       const logo = document.getElementById('site-logo');
       if (d.logo_image) {
         logo.src = d.logo_image;
@@ -354,15 +418,12 @@
         nameEl.style.display = 'none';
       }
 
-      // ── Hero watermark (always logo) ──
       const heroBgLogo = document.getElementById('hero-bg-logo');
       if (d.logo_image) heroBgLogo.src = d.logo_image;
 
-      // ── Hero photo background (separate from logo) ──
       const heroBg = document.getElementById('hero-photo-bg');
       if (d.hero_image) heroBg.style.backgroundImage = 'url(' + d.hero_image + ')';
 
-      // ── Text fields ──
       setText('hero-location', d.location);
       setText('hero-headline', d.headline);
       setText('hero-subheadline', d.subheadline);
@@ -370,7 +431,6 @@
       setText('about-text', d.about_text);
       setText('quote-intro', d.quote_intro);
 
-      // ── Buttons ──
       const pb = document.getElementById('primary-btn');
       const sb = document.getElementById('secondary-btn');
       if (d.primary_button_text) pb.textContent = d.primary_button_text;
@@ -378,7 +438,6 @@
       if (d.secondary_button_text) sb.textContent = d.secondary_button_text;
       if (d.secondary_button_link) sb.href = d.secondary_button_link;
 
-      // ── Phone ──
       const phoneEl = document.getElementById('footer-phone');
       if (d.phone) {
         phoneEl.textContent = d.phone;
@@ -386,16 +445,12 @@
         phoneEl.style.display = '';
       }
 
-      // ── Instagram ──
       const social = document.getElementById('footer-social');
       if (d.instagram) {
-        const handle = d.instagram.startsWith('http')
-          ? d.instagram
-          : 'https://instagram.com/' + d.instagram.replace('@', '');
+        const handle = d.instagram.startsWith('http') ? d.instagram : 'https://instagram.com/' + d.instagram.replace('@', '');
         social.innerHTML = '<a href="' + handle + '" target="_blank" rel="noopener">@ Instagram</a>';
       }
 
-      // ── Services ──
       const servicesList = document.getElementById('services-list');
       if (d.services && d.services.length) {
         servicesList.innerHTML = d.services.map(s =>
@@ -403,14 +458,12 @@
         ).join('');
       }
 
-      // ── Gallery ──
       const galleryList = document.getElementById('gallery-list');
       if (d.gallery && d.gallery.length) {
         galleryList.innerHTML = d.gallery.map((b, i) =>
           '<article class="build-card">' +
           (b.image ? '<img src="' + b.image + '" alt="' + b.title + '">' : '') +
-          '<div class="build-body">' +
-          '<span>' + String(i + 1).padStart(2, '0') + '</span>' +
+          '<div class="build-body"><span>' + String(i+1).padStart(2,'0') + '</span>' +
           '<h3>' + b.title + '</h3>' +
           (b.description ? '<p>' + b.description + '</p>' : '') +
           '</div></article>'
@@ -419,14 +472,12 @@
         galleryList.innerHTML = '<p style="color:#c9c2b8;padding:20px 0;">Build photos coming soon — add them in the CMS under Build Gallery.</p>';
       }
 
-      // ── Merch ──
       const merchList = document.getElementById('merch-list');
       if (d.merch && d.merch.length) {
         merchList.innerHTML = d.merch.map(m =>
           '<article class="merch-card">' +
           (m.image ? '<img src="' + m.image + '" alt="' + m.name + '">' : '<span>Coming Soon</span>') +
-          '<h3>' + m.name + '</h3>' +
-          '<p>' + m.description + '</p>' +
+          '<h3>' + m.name + '</h3><p>' + m.description + '</p>' +
           (m.link && m.link !== '#' ? '<a href="' + m.link + '" target="_blank">Shop Now</a>' : '') +
           '</article>'
         ).join('');
@@ -434,7 +485,6 @@
         merchList.innerHTML = '<p style="color:#c9c2b8;padding:20px 0;">Merch coming soon.</p>';
       }
 
-      // ── Reviews ──
       const reviewsList = document.getElementById('reviews-list');
       if (d.reviews && d.reviews.length) {
         reviewsList.innerHTML = d.reviews.map(r =>
@@ -443,7 +493,6 @@
       } else {
         reviewsList.innerHTML = '<p style="color:#c9c2b8;text-align:center;padding:20px 0;">Customer reviews coming soon.</p>';
       }
-
     })
     .catch(err => console.warn('Could not load site.json:', err));
 
