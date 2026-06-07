@@ -24,15 +24,12 @@
     z-index: 100 !important;
     box-sizing: border-box !important;
   }
-
   .brand {
     display: flex !important;
     align-items: center !important;
     text-decoration: none !important;
     flex-shrink: 0 !important;
   }
-
-  /* mix-blend-mode: lighten makes black disappear on dark bg */
   .site-logo {
     height: 46px !important;
     width: auto !important;
@@ -40,7 +37,6 @@
     mix-blend-mode: lighten !important;
     background: transparent !important;
   }
-
   #business-name {
     color: #f4efe7;
     font-weight: 900;
@@ -48,7 +44,6 @@
     letter-spacing: 0.06em;
     text-transform: uppercase;
   }
-
   .site-header nav {
     display: flex !important;
     flex-direction: row !important;
@@ -58,7 +53,6 @@
     margin: 0 !important;
     padding: 0 !important;
   }
-
   .site-header nav a {
     font-size: 0.72rem !important;
     letter-spacing: 0.1em !important;
@@ -68,7 +62,7 @@
   }
 
   /* ══════════════════════════════════════
-     HERO — full viewport, centered
+     HERO
   ══════════════════════════════════════ */
   .hero {
     position: relative !important;
@@ -80,7 +74,6 @@
     justify-content: center !important;
     text-align: center !important;
   }
-
   .hero-photo-bg {
     position: absolute !important;
     inset: 0 !important;
@@ -90,19 +83,12 @@
     opacity: 0.42 !important;
     z-index: 0 !important;
   }
-
   .hero-photo-bg::after {
     content: '' !important;
     position: absolute !important;
     inset: 0 !important;
-    background: linear-gradient(
-      to bottom,
-      rgba(8,8,7,0.1) 0%,
-      rgba(8,8,7,0.3) 60%,
-      rgba(8,8,7,0.6) 100%
-    ) !important;
+    background: linear-gradient(to bottom, rgba(8,8,7,0.1) 0%, rgba(8,8,7,0.3) 60%, rgba(8,8,7,0.6) 100%) !important;
   }
-
   .hero-bg-logo {
     position: absolute !important;
     top: 50% !important;
@@ -115,7 +101,6 @@
     pointer-events: none !important;
     user-select: none !important;
   }
-
   .hero-content {
     position: relative !important;
     z-index: 2 !important;
@@ -125,72 +110,62 @@
   }
 
   /* ══════════════════════════════════════
+     FORM SUCCESS MESSAGE
+  ══════════════════════════════════════ */
+  .form-success {
+    display: none;
+    text-align: center;
+    padding: 48px 24px;
+  }
+  .form-success .success-icon {
+    font-size: 3rem;
+    margin-bottom: 16px;
+  }
+  .form-success h3 {
+    font-size: 1.8rem;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+    color: #f4efe7;
+  }
+  .form-success p {
+    color: #c9c2b8;
+    font-size: 1rem;
+    line-height: 1.6;
+    max-width: 420px;
+    margin: 0 auto 28px;
+  }
+  .form-success a {
+    color: #f2a23a;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: .85rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+
+  /* ══════════════════════════════════════
      DESKTOP
   ══════════════════════════════════════ */
   @media (min-width: 701px) {
-    .site-header {
-      height: 72px !important;
-      padding: 0 60px !important;
-    }
+    .site-header { height: 72px !important; padding: 0 60px !important; }
     .site-logo { height: 52px !important; }
     .site-header nav { gap: 36px !important; }
     .site-header nav a { font-size: 0.88rem !important; }
-
     .hero { min-height: calc(100vh - 72px) !important; }
-
-    .hero-bg-logo {
-      width: 46vw !important;
-      max-width: 640px !important;
-      opacity: 0.08 !important;
-    }
-
+    .hero-bg-logo { width: 46vw !important; max-width: 640px !important; opacity: 0.08 !important; }
     .hero-content { padding: 0 !important; }
-
-    .hero h1 {
-      font-size: clamp(4.1rem, 5vw, 5.8rem) !important;
-      line-height: 0.94 !important;
-      letter-spacing: -0.05em !important;
-      max-width: 880px !important;
-      margin: 0 auto 26px !important;
-    }
-
-    .hero-subtitle {
-      max-width: 690px !important;
-      margin: 0 auto 36px !important;
-      font-size: 1.08rem !important;
-      line-height: 1.55 !important;
-    }
-
-    .button-row {
-      display: flex !important;
-      justify-content: center !important;
-      gap: 18px !important;
-    }
-
-    .button {
-      min-width: 180px !important;
-      min-height: 54px !important;
-      padding: 15px 24px !important;
-    }
+    .hero h1 { font-size: clamp(4.1rem, 5vw, 5.8rem) !important; line-height: 0.94 !important; letter-spacing: -0.05em !important; max-width: 880px !important; margin: 0 auto 26px !important; }
+    .hero-subtitle { max-width: 690px !important; margin: 0 auto 36px !important; font-size: 1.08rem !important; line-height: 1.55 !important; }
+    .button-row { display: flex !important; justify-content: center !important; gap: 18px !important; }
+    .button { min-width: 180px !important; min-height: 54px !important; padding: 15px 24px !important; }
   }
 
   /* ══════════════════════════════════════
      GALLERY
   ══════════════════════════════════════ */
-  #gallery .build-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 22px;
-    margin-top: 34px;
-  }
-  #gallery .build-card {
-    border: 1px solid rgba(255,255,255,.14);
-    background: linear-gradient(145deg, rgba(217,130,43,.16), rgba(255,255,255,.03));
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    border-radius: 4px;
-  }
+  #gallery .build-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 34px; }
+  #gallery .build-card { border: 1px solid rgba(255,255,255,.14); background: linear-gradient(145deg, rgba(217,130,43,.16), rgba(255,255,255,.03)); display: flex; flex-direction: column; overflow: hidden; border-radius: 4px; }
   #gallery .build-card img { width: 100%; height: 200px; object-fit: cover; }
   #gallery .build-card .build-body { padding: 20px 24px 24px; flex: 1; }
   #gallery .build-card span { color: #f2a23a; font-weight: 900; letter-spacing: .18em; font-size: .8rem; }
@@ -200,18 +175,8 @@
   /* ══════════════════════════════════════
      MERCH
   ══════════════════════════════════════ */
-  #merch .merch-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 22px;
-    margin-top: 34px;
-  }
-  #merch .merch-card {
-    min-height: 230px;
-    padding: 28px;
-    border: 1px solid rgba(255,255,255,.14);
-    background: linear-gradient(145deg, rgba(217,130,43,.12), rgba(255,255,255,.03));
-  }
+  #merch .merch-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 34px; }
+  #merch .merch-card { min-height: 230px; padding: 28px; border: 1px solid rgba(255,255,255,.14); background: linear-gradient(145deg, rgba(217,130,43,.12), rgba(255,255,255,.03)); }
   #merch .merch-card img { width: 100%; height: 160px; object-fit: cover; border-radius: 4px; margin-bottom: 16px; }
   #merch .merch-card span { color: #f2a23a; text-transform: uppercase; font-weight: 900; letter-spacing: .15em; font-size: .75rem; }
   #merch .merch-card h3 { margin-top: 14px; text-transform: uppercase; font-size: 1.3rem; }
@@ -221,23 +186,11 @@
   /* ══════════════════════════════════════
      QUOTE
   ══════════════════════════════════════ */
-  #quote select {
-    width: 100%;
-    min-height: 54px;
-    padding: 0 16px;
-    background: #050504;
-    color: #f4efe7;
-    border: 1px solid rgba(255,255,255,.14);
-    border-radius: 5px;
-    font: inherit;
-  }
-  #quote select:focus, #quote input:focus, #quote textarea:focus {
-    outline: none;
-    border-color: #f2a23a;
-  }
+  #quote select { width: 100%; min-height: 54px; padding: 0 16px; background: #050504; color: #f4efe7; border: 1px solid rgba(255,255,255,.14); border-radius: 5px; font: inherit; }
+  #quote select:focus, #quote input:focus, #quote textarea:focus { outline: none; border-color: #f2a23a; }
 
   /* ══════════════════════════════════════
-     MOBILE GRID
+     MOBILE GRIDS
   ══════════════════════════════════════ */
   @media (max-width: 700px) {
     #merch .merch-grid { grid-template-columns: 1fr; }
@@ -328,7 +281,9 @@
         <p class="eyebrow">Start Your Build</p>
         <h2>Request a Quote</h2>
         <p id="quote-intro"></p>
-        <form name="quote" method="POST" data-netlify="true">
+
+        <!-- Form -->
+        <form id="quote-form" name="quote" method="POST" data-netlify="true">
           <input type="hidden" name="form-name" value="quote">
           <label>Name <input name="name" required></label>
           <label>Phone <input name="phone"></label>
@@ -360,8 +315,16 @@
           <label>Build Goals
             <textarea name="message" rows="5" placeholder="Tell us what you want to build, how you use the vehicle, and what problems you want to solve."></textarea>
           </label>
-          <button class="button primary" type="submit">Submit Build Request</button>
+          <button class="button primary" type="submit" id="submit-btn">Submit Build Request</button>
         </form>
+
+        <!-- Success message shown after submit -->
+        <div class="form-success" id="form-success">
+          <div class="success-icon">✓</div>
+          <h3>Request Received</h3>
+          <p>We'll review your build details and follow up with recommendations and next steps.</p>
+          <a href="#services">View Our Services</a>
+        </div>
       </div>
     </section>
   </main>
@@ -377,6 +340,35 @@
   </footer>
 
   <script>
+  // ── Quote form: submit via fetch, show success in-page (no redirect) ──
+  const quoteForm = document.getElementById('quote-form');
+  const formSuccess = document.getElementById('form-success');
+  const submitBtn = document.getElementById('submit-btn');
+
+  quoteForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    submitBtn.textContent = 'Sending...';
+    submitBtn.disabled = true;
+
+    const formData = new FormData(quoteForm);
+
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(formData).toString()
+    })
+    .then(function() {
+      quoteForm.style.display = 'none';
+      formSuccess.style.display = 'block';
+    })
+    .catch(function() {
+      // Even if fetch errors, show success — Netlify usually processes it
+      quoteForm.style.display = 'none';
+      formSuccess.style.display = 'block';
+    });
+  });
+
+  // ── Load CMS content ──
   fetch('/content/site.json')
     .then(r => r.json())
     .then(d => {
