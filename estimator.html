@@ -10,7 +10,9 @@
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: #0d0d0d; color: #e0d6c2; font-family: Inter, Arial, sans-serif; }
-  ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: #111; } ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #111; }
+  ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
   select option { background: #1a1a1a; }
 </style>
 </head>
@@ -18,6 +20,9 @@
 <div id="root"></div>
 <script type="text/babel">
 const { useState, useEffect } = React;
+
+// ── CONFIG — paste your Apps Script URL here after deploying ─────────────────
+const APPS_SCRIPT_URL = localStorage.getItem("jt-script-url") || "";
 
 const STATUS_OPTIONS = ["New","Contacted","Estimated","Sent","Won","Lost"];
 const STATUS_COLORS  = {
@@ -28,16 +33,13 @@ const STATUS_COLORS  = {
   Won:       { border:"#27ae60", text:"#27ae60" },
   Lost:      { border:"#555",    text:"#888"    },
 };
-const GMAIL_MCP   = { type:"url", url:"https://gmailmcp.googleapis.com/mcp/v1", name:"gmail-mcp" };
-const STORAGE_KEY = "jt-offroad-leads";
-const KEY_STORE   = "jt-anthropic-key";
 
 const c   = { gold:"#c9a84c", dark:"#0d0d0d", card:"#1a1a1a", border:"#2a2a2a", text:"#e0d6c2", muted:"#888" };
 const inp = { background:"#111", border:"1px solid #2a2a2a", borderRadius:6, padding:"7px 10px", color:"#e0d6c2", fontSize:13, outline:"none", boxSizing:"border-box" };
 
-function uid()           { return Math.random().toString(36).slice(2,8); }
+function uid()           { return "JT-" + Math.random().toString(36).slice(2,8).toUpperCase(); }
 function blankEstimate() { return { parts:[], labor:[], markup:10, notes:"" }; }
-function fmt(v)          { return "$"+v.toFixed(2); }
+function fmt(v)          { return "$" + (parseFloat(v)||0).toFixed(2); }
 
 function calcTotals(est) {
   const p   = (est.parts||[]).reduce((s,x) => s+(parseFloat(x.qty)||0)*(parseFloat(x.unitCost)||0), 0);
@@ -46,60 +48,51 @@ function calcTotals(est) {
   return { partsTotal:p, laborTotal:l, subtotal:sub, markupAmt:mk, total:sub+mk };
 }
 
-function parseLeads(text) {
-  return text.split(/---LEAD---/i).map(b=>b.trim()).filter(Boolean).map(block => {
-    const get = f => { const m=block.match(new RegExp(`^${f}:\\s*(.+)`,"im")); return m?m[1].trim():""; };
-    return { name:get("Name"), phone:get("Phone"), email:get("Email"), vehicle:get("Vehicle"), service:get("Service"), budget:get("Budget"), message:get("Message"), date:get("Date"), threadId:get("ThreadId") };
-  }).filter(l => l.name||l.email);
+// ── API calls ────────────────────────────────────────────────────────────────
+async function fetchLeads(scriptUrl) {
+  const res  = await fetch(scriptUrl);
+  const data = await res.json();
+  return (data.leads||[]).map(row => ({
+    id:       row["ID"],
+    date:     row["Date Received"],
+    name:     row["Name"],
+    phone:    row["Phone"],
+    email:    row["Email"],
+    vehicle:  row["Vehicle"],
+    service:  row["Service"],
+    budget:   row["Budget"],
+    message:  row["Message"],
+    status:   row["Status"] || "New",
+    notes:    row["Notes"]  || "",
+    estimate: row["Estimate JSON"] ? JSON.parse(row["Estimate JSON"]) : blankEstimate(),
+  }));
 }
 
-async function syncGmail(apiKey, setStatus, setLeads, setDebug) {
-  if (!apiKey) { alert("Enter your Anthropic API key in Settings first."); return; }
-  setStatus("loading"); setDebug("");
-  try {
-    const res  = await fetch("https://api.anthropic.com/v1/messages", {
-      method:"POST",
-      headers:{ "Content-Type":"application/json", "x-api-key":apiKey, "anthropic-version":"2023-06-01", "anthropic-beta":"mcp-client-2025-04-04" },
-      body: JSON.stringify({
-        model:"claude-sonnet-4-6", max_tokens:2000, mcp_servers:[GMAIL_MCP],
-        system:`Search Gmail and extract form submission data. Output each lead separated by ---LEAD---:
-
----LEAD---
-Name: [value]
-Phone: [value]
-Email: [value]
-Vehicle: [value]
-Service: [value]
-Budget: [value]
-Message: [value]
-Date: [date received]
-ThreadId: [thread id]
-
-No extra text. If nothing found: NO_RESULTS`,
-        messages:[{ role:"user", content:"Search Gmail for emails from:formresponses@netlify.com. Fetch full thread content for each and extract all form fields." }],
-      }),
-    });
-    const data   = await res.json();
-    const blocks = data.content||[];
-    setDebug(blocks.map(b =>
-      b.type==="text"            ? `[TEXT]:\n${b.text}` :
-      b.type==="mcp_tool_use"    ? `[CALL]: ${b.name} → ${JSON.stringify(b.input)}` :
-      b.type==="mcp_tool_result" ? `[RESULT]: ${JSON.stringify(b.content)?.slice(0,400)}` : `[${b.type}]`
-    ).join("\n\n---\n\n"));
-    const text = blocks.filter(b=>b.type==="text").map(b=>b.text).join("\n");
-    if (!text||text.trim()==="NO_RESULTS") { setStatus("empty"); return; }
-    const parsed = parseLeads(text);
-    setLeads(prev => {
-      const merged = parsed.map(raw => {
-        const ex = prev.find(l => l.threadId===raw.threadId||(l.email===raw.email&&l.date===raw.date));
-        return { id:ex?.id||uid(), ...raw, status:ex?.status||"New", notes:ex?.notes||"", estimate:ex?.estimate||blankEstimate() };
-      });
-      return [...merged, ...prev.filter(l=>l.manual&&!merged.find(m=>m.id===l.id))];
-    });
-    setStatus(parsed.length?"done":"empty");
-  } catch(err) { setDebug("ERROR: "+err.message); setStatus("error"); }
+async function saveLead(scriptUrl, lead) {
+  const { total } = calcTotals(lead.estimate||blankEstimate());
+  await fetch(scriptUrl, {
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({
+      action:        "update",
+      id:            lead.id,
+      status:        lead.status,
+      notes:         lead.notes,
+      estimate:      lead.estimate,
+      estimateTotal: total > 0 ? fmt(total) : "",
+    }),
+  });
 }
 
+async function deleteLeadRemote(scriptUrl, id) {
+  await fetch(scriptUrl, {
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({ action:"delete", id }),
+  });
+}
+
+// ── PDF builder ──────────────────────────────────────────────────────────────
 function buildPdfHtml(lead) {
   const { partsTotal, laborTotal, subtotal, markupAmt, total } = calcTotals(lead.estimate||blankEstimate());
   return `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Estimate — ${lead.name}</title>
@@ -126,15 +119,15 @@ function buildPdfHtml(lead) {
   @media print{body{padding:20px}}
 </style></head><body>
 <div class="hdr">
-  <div><div class="brand">JT Offroad</div><div class="tagline">Built Beyond the Pavement · jtoffroad.com</div></div>
+  <div><div class="brand">JT Offroad</div><div class="tagline">Built Beyond the Pavement · jtoffroad.com · (831) 000-0000</div></div>
   <div style="text-align:right"><div style="font-size:20px;font-weight:700">Build Estimate</div><div style="font-size:12px;color:#666;margin-top:4px">${new Date().toLocaleDateString()}</div></div>
 </div>
 <div class="sec">
   <div class="sec-title">Customer</div>
   <div class="grid">${[["Name",lead.name],["Phone",lead.phone],["Email",lead.email],["Vehicle",lead.vehicle],["Service",lead.service],["Budget",lead.budget]].filter(([,v])=>v).map(([l,v])=>`<div class="row"><span class="lbl">${l}</span><span>${v}</span></div>`).join("")}</div>
 </div>
-${lead.estimate?.parts?.length?`<div class="sec"><div class="sec-title">Parts &amp; Materials</div><table><thead><tr><th>Description</th><th class="tr">Qty</th><th class="tr">Unit Cost</th><th class="tr">Total</th></tr></thead><tbody>${lead.estimate.parts.map(p=>`<tr><td>${p.description}</td><td class="tr">${p.qty}</td><td class="tr">${fmt(parseFloat(p.unitCost)||0)}</td><td class="tr">${fmt((parseFloat(p.qty)||0)*(parseFloat(p.unitCost)||0))}</td></tr>`).join("")}</tbody></table></div>`:""}
-${lead.estimate?.labor?.length?`<div class="sec"><div class="sec-title">Labor</div><table><thead><tr><th>Description</th><th class="tr">Hours</th><th class="tr">Rate/hr</th><th class="tr">Total</th></tr></thead><tbody>${lead.estimate.labor.map(l=>`<tr><td>${l.description}</td><td class="tr">${l.hours}</td><td class="tr">${fmt(parseFloat(l.rate)||0)}</td><td class="tr">${fmt((parseFloat(l.hours)||0)*(parseFloat(l.rate)||0))}</td></tr>`).join("")}</tbody></table></div>`:""}
+${lead.estimate?.parts?.length?`<div class="sec"><div class="sec-title">Parts &amp; Materials</div><table><thead><tr><th>Description</th><th class="tr">Qty</th><th class="tr">Unit Cost</th><th class="tr">Total</th></tr></thead><tbody>${lead.estimate.parts.map(p=>`<tr><td>${p.description}</td><td class="tr">${p.qty}</td><td class="tr">${fmt(p.unitCost)}</td><td class="tr">${fmt((parseFloat(p.qty)||0)*(parseFloat(p.unitCost)||0))}</td></tr>`).join("")}</tbody></table></div>`:""}
+${lead.estimate?.labor?.length?`<div class="sec"><div class="sec-title">Labor</div><table><thead><tr><th>Description</th><th class="tr">Hours</th><th class="tr">Rate/hr</th><th class="tr">Total</th></tr></thead><tbody>${lead.estimate.labor.map(l=>`<tr><td>${l.description}</td><td class="tr">${l.hours}</td><td class="tr">${fmt(l.rate)}</td><td class="tr">${fmt((parseFloat(l.hours)||0)*(parseFloat(l.rate)||0))}</td></tr>`).join("")}</tbody></table></div>`:""}
 <div class="sec"><div class="totals">
   ${lead.estimate?.parts?.length?`<div class="trow"><span>Parts</span><span>${fmt(partsTotal)}</span></div>`:""}
   ${lead.estimate?.labor?.length?`<div class="trow"><span>Labor</span><span>${fmt(laborTotal)}</span></div>`:""}
@@ -149,13 +142,13 @@ ${lead.notes?`<div class="sec"><div class="sec-title">Additional Notes</div><div
 </body></html>`;
 }
 
-// ── Line Item ────────────────────────────────────────────────────────────────
+// ── Line Item ─────────────────────────────────────────────────────────────────
 function LineItem({ item, type, onChange, onDelete }) {
   const total = type==="part"
     ? (parseFloat(item.qty)||0)*(parseFloat(item.unitCost)||0)
     : (parseFloat(item.hours)||0)*(parseFloat(item.rate)||0);
   return (
-    <div style={{ display:"grid", gridTemplateColumns:"1fr 64px 90px 72px 28px", gap:6, marginBottom:6, alignItems:"center" }}>
+    <div style={{display:"grid",gridTemplateColumns:"1fr 64px 90px 72px 28px",gap:6,marginBottom:6,alignItems:"center"}}>
       <input value={item.description} placeholder="Description" onChange={e=>onChange({...item,description:e.target.value})} style={{...inp,width:"100%"}} />
       <input value={type==="part"?item.qty:item.hours} placeholder={type==="part"?"Qty":"Hrs"} onChange={e=>onChange(type==="part"?{...item,qty:e.target.value}:{...item,hours:e.target.value})} style={{...inp,width:"100%",textAlign:"right"}} />
       <input value={type==="part"?item.unitCost:item.rate} placeholder={type==="part"?"Unit $":"$/hr"} onChange={e=>onChange(type==="part"?{...item,unitCost:e.target.value}:{...item,rate:e.target.value})} style={{...inp,width:"100%",textAlign:"right"}} />
@@ -165,13 +158,13 @@ function LineItem({ item, type, onChange, onDelete }) {
   );
 }
 
-// ── Estimate Builder ─────────────────────────────────────────────────────────
+// ── Estimate Builder ──────────────────────────────────────────────────────────
 function EstimateBuilder({ lead, onChange }) {
   const est = lead.estimate||blankEstimate();
   const { partsTotal, laborTotal, subtotal, markupAmt, total } = calcTotals(est);
-  const upd      = patch => onChange({...lead, estimate:{...est,...patch}});
-  const addPart  = () => upd({ parts:[...est.parts,{id:uid(),description:"",qty:"1",unitCost:""}] });
-  const addLabor = () => upd({ labor:[...est.labor,{id:uid(),description:"",hours:"",rate:"95"}] });
+  const upd      = patch => onChange({...lead,estimate:{...est,...patch}});
+  const addPart  = () => upd({parts:[...est.parts,{id:uid(),description:"",qty:"1",unitCost:""}]});
+  const addLabor = () => upd({labor:[...est.labor,{id:uid(),description:"",hours:"",rate:"95"}]});
   const colHdr   = cols => (
     <div style={{display:"grid",gridTemplateColumns:"1fr 64px 90px 72px 28px",gap:6,marginBottom:4}}>
       {cols.map(l=><div key={l} style={{fontSize:10,color:"#555",textTransform:"uppercase",letterSpacing:"0.06em"}}>{l}</div>)}
@@ -216,20 +209,17 @@ function EstimateBuilder({ lead, onChange }) {
   );
 }
 
-// ── Settings Panel ───────────────────────────────────────────────────────────
-function Settings({ apiKey, onSave, onClose }) {
-  const [val, setVal] = useState(apiKey);
+// ── Settings ──────────────────────────────────────────────────────────────────
+function Settings({ scriptUrl, onSave, onClose }) {
+  const [val, setVal] = useState(scriptUrl);
   return (
     <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.85)",display:"flex",alignItems:"center",justifyContent:"center",zIndex:2000}} onClick={onClose}>
-      <div style={{background:"#111",border:`1px solid ${c.border}`,borderRadius:12,padding:28,width:460,maxWidth:"95vw"}} onClick={e=>e.stopPropagation()}>
+      <div style={{background:"#111",border:`1px solid ${c.border}`,borderRadius:12,padding:28,width:500,maxWidth:"95vw"}} onClick={e=>e.stopPropagation()}>
         <div style={{fontSize:15,fontWeight:700,color:c.gold,marginBottom:6}}>Settings</div>
-        <div style={{fontSize:12,color:c.muted,marginBottom:18}}>Your API key is stored locally in your browser and never sent anywhere except Anthropic's API.</div>
-        <div style={{fontSize:11,color:c.muted,textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:4}}>Anthropic API Key</div>
-        <input value={val} onChange={e=>setVal(e.target.value)} placeholder="sk-ant-..." type="password"
-          style={{...inp,width:"100%",marginBottom:16,fontFamily:"monospace"}} />
-        <div style={{fontSize:11,color:"#555",marginBottom:18}}>
-          Get your key at <a href="https://console.anthropic.com" target="_blank" style={{color:c.gold}}>console.anthropic.com</a>
-        </div>
+        <div style={{fontSize:12,color:c.muted,marginBottom:18}}>Paste your Google Apps Script web app URL below. You get this after deploying the script.</div>
+        <div style={{fontSize:11,color:c.muted,textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:4}}>Apps Script URL</div>
+        <input value={val} onChange={e=>setVal(e.target.value)} placeholder="https://script.google.com/macros/s/..."
+          style={{...inp,width:"100%",marginBottom:20,fontFamily:"monospace",fontSize:11}} />
         <div style={{display:"flex",gap:10}}>
           <button onClick={()=>{onSave(val);onClose();}} style={{background:c.gold,border:"none",borderRadius:6,padding:"7px 18px",color:"#000",fontSize:13,fontWeight:700,cursor:"pointer"}}>Save</button>
           <button onClick={onClose} style={{background:"transparent",border:`1px solid ${c.border}`,borderRadius:6,padding:"7px 14px",color:c.muted,fontSize:13,cursor:"pointer"}}>Cancel</button>
@@ -239,63 +229,73 @@ function Settings({ apiKey, onSave, onClose }) {
   );
 }
 
-// ── Main App ─────────────────────────────────────────────────────────────────
+// ── Main App ──────────────────────────────────────────────────────────────────
 function App() {
   const [leads, setLeads]                 = useState([]);
-  const [syncStatus, setSyncStatus]       = useState("idle");
+  const [loading, setLoading]             = useState(false);
+  const [lastSync, setLastSync]           = useState("");
   const [selected, setSelected]           = useState(null);
   const [activeTab, setActiveTab]         = useState("details");
   const [filter, setFilter]               = useState("All");
   const [search, setSearch]               = useState("");
-  const [debug, setDebug]                 = useState("");
-  const [showDebug, setShowDebug]         = useState(false);
   const [hovered, setHovered]             = useState(null);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [showSettings, setShowSettings]   = useState(false);
-  const [apiKey, setApiKey]               = useState("");
+  const [scriptUrl, setScriptUrl]         = useState(localStorage.getItem("jt-script-url")||"");
+  const [saving, setSaving]               = useState(false);
+  const [error, setError]                 = useState("");
 
-  useEffect(() => {
-    const saved     = localStorage.getItem(STORAGE_KEY);
-    const savedKey  = localStorage.getItem(KEY_STORE);
-    if (saved)    try { setLeads(JSON.parse(saved)); } catch(_) {}
-    if (savedKey) setApiKey(savedKey);
-  }, []);
+  const saveScriptUrl = url => { setScriptUrl(url); localStorage.setItem("jt-script-url", url); };
 
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(leads));
-  }, [leads]);
+  const loadLeads = async () => {
+    if (!scriptUrl) return;
+    setLoading(true); setError("");
+    try {
+      const data = await fetchLeads(scriptUrl);
+      setLeads(data);
+      setLastSync(new Date().toLocaleTimeString());
+    } catch(e) { setError("Could not load leads: " + e.message); }
+    setLoading(false);
+  };
 
-  const saveKey = key => { setApiKey(key); localStorage.setItem(KEY_STORE, key); };
+  useEffect(() => { if (scriptUrl) loadLeads(); }, [scriptUrl]);
 
   const openLead  = lead => { setSelected(lead); setActiveTab("details"); setConfirmDelete(false); };
   const closeLead = ()   => { setSelected(null); setConfirmDelete(false); };
 
-  const updateField = (id, field, val) => {
-    setLeads(prev => prev.map(l => l.id===id?{...l,[field]:val}:l));
-    if (selected?.id===id) setSelected(p=>({...p,[field]:val}));
-  };
-  const updateSelected = updated => {
+  const updateAndSave = async updated => {
     setLeads(prev => prev.map(l => l.id===updated.id?updated:l));
     setSelected(updated);
+    setSaving(true);
+    try { await saveLead(scriptUrl, updated); } catch(_) {}
+    setSaving(false);
   };
-  const deleteLead = id => { setLeads(prev=>prev.filter(l=>l.id!==id)); closeLead(); };
+
+  const updateField = async (id, field, val) => {
+    const updated = leads.find(l=>l.id===id);
+    if (!updated) return;
+    await updateAndSave({...updated,[field]:val});
+  };
+
+  const handleDelete = async id => {
+    setLeads(prev=>prev.filter(l=>l.id!==id));
+    closeLead();
+    try { await deleteLeadRemote(scriptUrl, id); } catch(_) {}
+  };
+
+  const downloadPdf = lead => {
+    const html = buildPdfHtml(lead);
+    const blob = new Blob([html],{type:"text/html"});
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement("a");
+    a.href=url; a.download=`JT-Offroad-Estimate-${(lead.name||"estimate").replace(/\s+/g,"-")}.html`;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
 
   const estTotal = lead => {
     const { total } = calcTotals(lead.estimate||blankEstimate());
     return total>0?fmt(total):null;
-  };
-
-  const downloadPdf = lead => {
-    const html  = buildPdfHtml(lead);
-    const blob  = new Blob([html],{type:"text/html"});
-    const url   = URL.createObjectURL(blob);
-    const a     = document.createElement("a");
-    a.href      = url;
-    a.download  = `JT-Offroad-Estimate-${(lead.name||"estimate").replace(/\s+/g,"-")}.html`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
   };
 
   const counts   = STATUS_OPTIONS.reduce((a,s)=>{ a[s]=leads.filter(l=>l.status===s).length; return a; },{});
@@ -313,94 +313,91 @@ function App() {
           <div style={{fontSize:18,fontWeight:800,color:c.gold,textTransform:"uppercase",letterSpacing:"0.05em"}}>JT Offroad — Build Estimator</div>
           <div style={{fontSize:11,color:c.muted}}>Built Beyond the Pavement</div>
         </div>
-        <button onClick={()=>setShowSettings(true)} style={{background:"transparent",border:`1px solid ${c.border}`,borderRadius:6,padding:"6px 12px",color:c.muted,fontSize:12,cursor:"pointer"}}>
-          ⚙ Settings
-        </button>
+        <div style={{display:"flex",gap:10,alignItems:"center"}}>
+          {lastSync&&<div style={{fontSize:11,color:"#555"}}>Last sync: {lastSync}</div>}
+          {saving&&<div style={{fontSize:11,color:c.gold}}>Saving…</div>}
+          <button onClick={()=>setShowSettings(true)} style={{background:"transparent",border:`1px solid ${c.border}`,borderRadius:6,padding:"6px 12px",color:c.muted,fontSize:12,cursor:"pointer"}}>⚙ Settings</button>
+        </div>
       </div>
 
       <div style={{padding:"20px 24px"}}>
 
-        {/* Stats */}
-        <div style={{display:"flex",gap:10,marginBottom:18,flexWrap:"wrap"}}>
-          {[["Total",leads.length,c.gold],...STATUS_OPTIONS.map(s=>[s,counts[s]||0,STATUS_COLORS[s].text])].map(([label,num,color])=>(
-            <div key={label} style={{background:c.card,border:`1px solid ${color}`,borderRadius:8,padding:"10px 16px",textAlign:"center",minWidth:64}}>
-              <div style={{fontSize:22,fontWeight:800,color}}>{num}</div>
-              <div style={{fontSize:10,color:c.muted,textTransform:"uppercase",letterSpacing:"0.08em"}}>{label}</div>
-            </div>
-          ))}
-        </div>
-
-        {/* Toolbar */}
-        <div style={{display:"flex",gap:8,marginBottom:18,flexWrap:"wrap",alignItems:"center"}}>
-          <input placeholder="Search…" value={search} onChange={e=>setSearch(e.target.value)}
-            style={{background:c.card,border:`1px solid ${c.border}`,borderRadius:6,padding:"7px 12px",color:c.text,fontSize:13,width:180,outline:"none"}} />
-          {["All",...STATUS_OPTIONS].map(s=>(
-            <button key={s} onClick={()=>setFilter(s)} style={{background:filter===s?c.gold:c.card,border:`1px solid ${filter===s?c.gold:c.border}`,borderRadius:6,padding:"5px 10px",color:filter===s?"#000":c.muted,fontSize:12,cursor:"pointer",fontWeight:filter===s?700:400}}>{s}</button>
-          ))}
-          <button onClick={()=>setShowDebug(v=>!v)} style={{background:"transparent",border:`1px solid ${c.border}`,borderRadius:6,padding:"5px 10px",color:"#555",fontSize:11,cursor:"pointer",marginLeft:"auto"}}>
-            {showDebug?"Hide Debug":"Debug"}
-          </button>
-          <button onClick={()=>syncGmail(apiKey,setSyncStatus,setLeads,setDebug)} disabled={syncStatus==="loading"}
-            style={{background:c.gold,border:"none",borderRadius:6,padding:"7px 16px",color:"#000",fontSize:13,fontWeight:700,cursor:"pointer"}}>
-            {syncStatus==="loading"?"⏳ Syncing…":"⟳ Sync Gmail"}
-          </button>
-        </div>
-
-        {/* Empty states */}
-        {!apiKey && (
-          <div style={{textAlign:"center",padding:"40px 0",color:"#555"}}>
-            <div style={{fontSize:30,marginBottom:10}}>🔑</div>
-            <div style={{marginBottom:8}}>Add your Anthropic API key in <strong style={{color:c.gold,cursor:"pointer"}} onClick={()=>setShowSettings(true)}>Settings</strong> to get started.</div>
-          </div>
-        )}
-        {apiKey&&syncStatus==="idle"&&!leads.length&&(
+        {/* No script URL state */}
+        {!scriptUrl&&(
           <div style={{textAlign:"center",padding:"60px 0",color:"#555"}}>
-            <div style={{fontSize:36,marginBottom:10}}>📬</div>
-            <div>Hit <strong style={{color:c.gold}}>Sync Gmail</strong> to pull your build requests</div>
+            <div style={{fontSize:36,marginBottom:12}}>🔧</div>
+            <div style={{marginBottom:8,fontSize:15}}>Paste your Google Apps Script URL in <strong style={{color:c.gold,cursor:"pointer"}} onClick={()=>setShowSettings(true)}>Settings</strong> to get started.</div>
+            <div style={{fontSize:12,color:"#444"}}>Follow the setup guide to deploy your script first.</div>
           </div>
         )}
-        {syncStatus==="empty"&&!leads.length&&<div style={{textAlign:"center",padding:"60px 0",color:"#555"}}>🔍 No submissions found.</div>}
-        {syncStatus==="error"&&<div style={{textAlign:"center",padding:40,color:"#e74c3c"}}>⚠️ Error — check debug output below.</div>}
 
-        {/* Table */}
-        {leads.length>0&&(
-          <table style={{width:"100%",borderCollapse:"collapse"}}>
-            <thead>
-              <tr>{["Customer","Vehicle","Service","Budget","Date","Status","Estimate"].map(h=>
-                <th key={h} style={{textAlign:"left",padding:"10px 12px",fontSize:11,color:c.muted,textTransform:"uppercase",letterSpacing:"0.08em",borderBottom:"1px solid #222"}}>{h}</th>
-              )}</tr>
-            </thead>
-            <tbody>
-              {filtered.map(lead=>(
-                <tr key={lead.id} style={{cursor:"pointer",background:hovered===lead.id?"#161616":"transparent",borderBottom:"1px solid #181818"}}
-                  onMouseEnter={()=>setHovered(lead.id)} onMouseLeave={()=>setHovered(null)} onClick={()=>openLead(lead)}>
-                  <td style={{padding:12,fontSize:13}}>
-                    <div style={{fontWeight:600}}>{lead.name}</div>
-                    <div style={{fontSize:11,color:"#666"}}>{lead.email}</div>
-                    <div style={{fontSize:11,color:"#666"}}>{lead.phone}</div>
-                  </td>
-                  <td style={{padding:12,fontSize:13}}>{lead.vehicle||<span style={{color:"#444"}}>—</span>}</td>
-                  <td style={{padding:12,fontSize:13}}>{lead.service||<span style={{color:"#444"}}>—</span>}</td>
-                  <td style={{padding:12,fontSize:13}}>{lead.budget||<span style={{color:"#444"}}>—</span>}</td>
-                  <td style={{padding:12,fontSize:13,whiteSpace:"nowrap"}}>{lead.date}</td>
-                  <td style={{padding:12,fontSize:13}}>
-                    <span style={{display:"inline-block",padding:"3px 10px",borderRadius:20,fontSize:11,fontWeight:700,border:`1px solid ${STATUS_COLORS[lead.status]?.border}`,color:STATUS_COLORS[lead.status]?.text}}>{lead.status}</span>
-                  </td>
-                  <td style={{padding:12,fontSize:13}}>
-                    {estTotal(lead)?<span style={{color:"#27ae60",fontWeight:700}}>{estTotal(lead)}</span>:<span style={{color:"#444"}}>—</span>}
-                  </td>
-                </tr>
+        {error&&<div style={{background:"#1a0a0a",border:"1px solid #c0392b",borderRadius:8,padding:"10px 16px",marginBottom:16,fontSize:13,color:"#e74c3c"}}>{error}</div>}
+
+        {scriptUrl&&(
+          <>
+            {/* Stats */}
+            <div style={{display:"flex",gap:10,marginBottom:18,flexWrap:"wrap"}}>
+              {[["Total",leads.length,c.gold],...STATUS_OPTIONS.map(s=>[s,counts[s]||0,STATUS_COLORS[s].text])].map(([label,num,color])=>(
+                <div key={label} style={{background:c.card,border:`1px solid ${color}`,borderRadius:8,padding:"10px 16px",textAlign:"center",minWidth:64}}>
+                  <div style={{fontSize:22,fontWeight:800,color}}>{num}</div>
+                  <div style={{fontSize:10,color:c.muted,textTransform:"uppercase",letterSpacing:"0.08em"}}>{label}</div>
+                </div>
               ))}
-            </tbody>
-          </table>
-        )}
+            </div>
 
-        {/* Debug */}
-        {showDebug&&(
-          <div style={{background:"#0a0a0a",border:"1px solid #222",borderRadius:8,padding:16,marginTop:20,fontSize:11,color:"#666",fontFamily:"monospace",whiteSpace:"pre-wrap",wordBreak:"break-all",maxHeight:280,overflowY:"auto"}}>
-            <div style={{color:c.gold,marginBottom:8,fontWeight:700}}>RAW GMAIL RESPONSE</div>
-            {debug||"(run Sync Gmail first)"}
-          </div>
+            {/* Toolbar */}
+            <div style={{display:"flex",gap:8,marginBottom:18,flexWrap:"wrap",alignItems:"center"}}>
+              <input placeholder="Search…" value={search} onChange={e=>setSearch(e.target.value)}
+                style={{background:c.card,border:`1px solid ${c.border}`,borderRadius:6,padding:"7px 12px",color:c.text,fontSize:13,width:180,outline:"none"}} />
+              {["All",...STATUS_OPTIONS].map(s=>(
+                <button key={s} onClick={()=>setFilter(s)} style={{background:filter===s?c.gold:c.card,border:`1px solid ${filter===s?c.gold:c.border}`,borderRadius:6,padding:"5px 10px",color:filter===s?"#000":c.muted,fontSize:12,cursor:"pointer",fontWeight:filter===s?700:400}}>{s}</button>
+              ))}
+              <button onClick={loadLeads} disabled={loading} style={{marginLeft:"auto",background:c.gold,border:"none",borderRadius:6,padding:"7px 16px",color:"#000",fontSize:13,fontWeight:700,cursor:"pointer"}}>
+                {loading?"⏳ Loading…":"⟳ Refresh"}
+              </button>
+            </div>
+
+            {!leads.length&&!loading&&(
+              <div style={{textAlign:"center",padding:"60px 0",color:"#555"}}>
+                <div style={{fontSize:36,marginBottom:10}}>📬</div>
+                <div>No leads yet — they'll appear here when customers submit the form on jtoffroad.com</div>
+              </div>
+            )}
+            {loading&&<div style={{textAlign:"center",padding:"40px 0",color:c.muted}}>⏳ Loading leads…</div>}
+
+            {/* Table */}
+            {leads.length>0&&(
+              <table style={{width:"100%",borderCollapse:"collapse"}}>
+                <thead>
+                  <tr>{["Customer","Vehicle","Service","Budget","Date","Status","Estimate"].map(h=>
+                    <th key={h} style={{textAlign:"left",padding:"10px 12px",fontSize:11,color:c.muted,textTransform:"uppercase",letterSpacing:"0.08em",borderBottom:"1px solid #222"}}>{h}</th>
+                  )}</tr>
+                </thead>
+                <tbody>
+                  {filtered.map(lead=>(
+                    <tr key={lead.id} style={{cursor:"pointer",background:hovered===lead.id?"#161616":"transparent",borderBottom:"1px solid #181818"}}
+                      onMouseEnter={()=>setHovered(lead.id)} onMouseLeave={()=>setHovered(null)} onClick={()=>openLead(lead)}>
+                      <td style={{padding:12,fontSize:13}}>
+                        <div style={{fontWeight:600}}>{lead.name}</div>
+                        <div style={{fontSize:11,color:"#666"}}>{lead.email}</div>
+                        <div style={{fontSize:11,color:"#666"}}>{lead.phone}</div>
+                      </td>
+                      <td style={{padding:12,fontSize:13}}>{lead.vehicle||<span style={{color:"#444"}}>—</span>}</td>
+                      <td style={{padding:12,fontSize:13}}>{lead.service||<span style={{color:"#444"}}>—</span>}</td>
+                      <td style={{padding:12,fontSize:13}}>{lead.budget||<span style={{color:"#444"}}>—</span>}</td>
+                      <td style={{padding:12,fontSize:13,whiteSpace:"nowrap"}}>{lead.date}</td>
+                      <td style={{padding:12,fontSize:13}}>
+                        <span style={{display:"inline-block",padding:"3px 10px",borderRadius:20,fontSize:11,fontWeight:700,border:`1px solid ${STATUS_COLORS[lead.status]?.border}`,color:STATUS_COLORS[lead.status]?.text}}>{lead.status}</span>
+                      </td>
+                      <td style={{padding:12,fontSize:13}}>
+                        {estTotal(lead)?<span style={{color:"#27ae60",fontWeight:700}}>{estTotal(lead)}</span>:<span style={{color:"#444"}}>—</span>}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </>
         )}
       </div>
 
@@ -442,7 +439,7 @@ function App() {
                     style={{...inp,width:"100%",minHeight:80,resize:"vertical"}} />
                 </div>
               )}
-              {activeTab==="estimate"&&<EstimateBuilder lead={selected} onChange={updateSelected} />}
+              {activeTab==="estimate"&&<EstimateBuilder lead={selected} onChange={updateAndSave} />}
             </div>
 
             <div style={{padding:"12px 22px",borderTop:`1px solid ${c.border}`,flexShrink:0}}>
@@ -450,18 +447,16 @@ function App() {
                 <div style={{display:"flex",gap:10,alignItems:"center"}}>
                   <button onClick={closeLead} style={{background:"transparent",border:`1px solid ${c.border}`,borderRadius:6,padding:"7px 14px",color:c.muted,fontSize:13,cursor:"pointer"}}>Close</button>
                   {activeTab==="estimate"&&(
-                    <button onClick={()=>downloadPdf(selected)} style={{background:c.gold,border:"none",borderRadius:6,padding:"7px 16px",color:"#000",fontSize:13,fontWeight:700,cursor:"pointer"}}>
-                      ⬇ Download PDF
-                    </button>
+                    <button onClick={()=>downloadPdf(selected)} style={{background:c.gold,border:"none",borderRadius:6,padding:"7px 16px",color:"#000",fontSize:13,fontWeight:700,cursor:"pointer"}}>⬇ Download Estimate</button>
                   )}
                   <button onClick={()=>setConfirmDelete(true)} style={{marginLeft:"auto",background:"transparent",border:"1px solid #c0392b",borderRadius:6,padding:"7px 14px",color:"#c0392b",fontSize:13,cursor:"pointer"}}>Delete</button>
                 </div>
               ):(
                 <div style={{background:"#1a0a0a",border:"1px solid #c0392b",borderRadius:8,padding:"12px 14px"}}>
-                  <div style={{fontSize:13,color:"#e74c3c",marginBottom:10}}>Delete this estimate? This can't be undone.</div>
+                  <div style={{fontSize:13,color:"#e74c3c",marginBottom:10}}>Delete this lead? This can't be undone.</div>
                   <div style={{display:"flex",gap:10}}>
                     <button onClick={()=>setConfirmDelete(false)} style={{background:"transparent",border:`1px solid ${c.border}`,borderRadius:6,padding:"6px 14px",color:c.muted,fontSize:13,cursor:"pointer"}}>Cancel</button>
-                    <button onClick={()=>deleteLead(selected.id)} style={{background:"#c0392b",border:"none",borderRadius:6,padding:"6px 14px",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer"}}>Yes, Delete</button>
+                    <button onClick={()=>handleDelete(selected.id)} style={{background:"#c0392b",border:"none",borderRadius:6,padding:"6px 14px",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer"}}>Yes, Delete</button>
                   </div>
                 </div>
               )}
@@ -470,7 +465,7 @@ function App() {
         </div>
       )}
 
-      {showSettings&&<Settings apiKey={apiKey} onSave={saveKey} onClose={()=>setShowSettings(false)} />}
+      {showSettings&&<Settings scriptUrl={scriptUrl} onSave={saveScriptUrl} onClose={()=>setShowSettings(false)} />}
     </div>
   );
 }
