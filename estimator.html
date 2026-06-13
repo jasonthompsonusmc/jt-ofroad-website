@@ -276,8 +276,18 @@ function App() {
   };
 
   const handleDelete = async id => {
-    setLeads(prev=>prev.filter(l=>l.id!==id));
-    closeLead();
+    const currentIndex = leads.findIndex(l => l.id === id);
+    const remaining    = leads.filter(l => l.id !== id);
+    setLeads(remaining);
+    // Auto-open next lead, or previous if at end, or close if none left
+    if (remaining.length > 0) {
+      const nextIndex = currentIndex < remaining.length ? currentIndex : remaining.length - 1;
+      setSelected(remaining[nextIndex]);
+      setActiveTab("details");
+      setConfirmDelete(false);
+    } else {
+      closeLead();
+    }
     try { await deleteLeadRemote(scriptUrl, id); } catch(_) {}
   };
 
