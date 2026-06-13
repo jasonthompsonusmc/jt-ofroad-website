@@ -1,0 +1,21 @@
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyTCaFxSV4Aw4lEN0Yf7yZX6ncMaomEiTml3r7bgdOE1rpi1qLgyVLxsXGTXZ4sLw7tLg/exec";
+
+exports.handler = async function(event) {
+  if (event.httpMethod !== "POST") {
+    return { statusCode: 200, body: "OK" };
+  }
+
+  try {
+    const response = await fetch(APPS_SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: event.body,
+      redirect: "follow",
+    });
+
+    return { statusCode: 200, body: "OK" };
+  } catch (err) {
+    console.error("Webhook forward error:", err);
+    return { statusCode: 200, body: "OK" };
+  }
+};
