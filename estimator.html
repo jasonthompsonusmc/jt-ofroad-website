@@ -72,7 +72,6 @@ async function saveLead(scriptUrl, lead) {
   const { total } = calcTotals(lead.estimate||blankEstimate());
   await fetch(scriptUrl, {
     method:"POST",
-    headers:{ "Content-Type":"application/json" },
     body: JSON.stringify({
       action:        "update",
       id:            lead.id,
@@ -87,7 +86,6 @@ async function saveLead(scriptUrl, lead) {
 async function deleteLeadRemote(scriptUrl, id) {
   await fetch(scriptUrl, {
     method:"POST",
-    headers:{ "Content-Type":"application/json" },
     body: JSON.stringify({ action:"delete", id }),
   });
 }
